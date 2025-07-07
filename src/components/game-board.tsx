@@ -16,7 +16,7 @@ export interface GameBoardHandle {
   setupGame: () => void;
 }
 
-export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
+export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, ...props }, ref) => {
   const { t } = useLanguage();
   const [gameState, setGameState] = useState<GameState>('setup');
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
@@ -54,7 +54,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
     setLastPlayedCardValue(null);
     setPreviousTableSum(null);
     setHintCards([]);
-    setGameJustStarted(true); // Signal that game has just started/restarted
+    setGameJustStarted(true);
     setGameState('playing');
   }, []);
 
@@ -74,9 +74,8 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
       setGameMessage(initialMessage);
       
       const timer = setTimeout(() => {
-        // Only clear the message if it's still the initial message
         setGameMessage(msg => msg === initialMessage ? null : msg);
-        setGameJustStarted(false); // Reset the flag *after* the timeout
+        setGameJustStarted(false);
       }, 2000);
 
       return () => clearTimeout(timer);
@@ -203,7 +202,6 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
             setGameMessage(null);
         }, 2000);
     } else {
-        // No more cards to deal. Game is over. Process final cards.
         if (tableCards.length > 0 && lastPlayerToPlay) {
           const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
           const points = calculateScore(tableCards);
@@ -216,18 +214,16 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
               setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
               setTableCards([]);
               setPreviousTableSum(null);
-              setGameMessage(t.allCardsPlayed);
-              setTimeout(() => setGameState('gameOver'), 2000);
+              setGameMessage(null);
+              setGameState('gameOver');
             }, 2000);
           } else {
             setTableCards([]);
             setPreviousTableSum(null);
-            setGameMessage(t.allCardsPlayed);
-            setTimeout(() => setGameState('gameOver'), 2000);
+            setGameState('gameOver');
           }
         } else {
-          setGameMessage(t.allCardsPlayed);
-          setTimeout(() => setGameState('gameOver'), 2000);
+          setGameState('gameOver');
         }
     }
   }, [decks, t, tableCards, lastPlayerToPlay]);

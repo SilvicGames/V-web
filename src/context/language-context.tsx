@@ -12,7 +12,6 @@ const translations = {
     playerScores: (points: number) => `¡Sumas ${points} punto${points > 1 ? 's' : ''}!`,
     cpuScores: (points: number) => `¡La CPU suma ${points} punto${points > 1 ? 's' : ''}!`,
     dealingNewCards: "Repartiendo nuevas cartas...",
-    allCardsPlayed: "¡Se han jugado todas las cartas!",
 
     // GameOverDialog
     congrats: "¡Enhorabuena, has ganado!",
@@ -44,7 +43,6 @@ const translations = {
     playerScores: (points: number) => `You score ${points} point${points > 1 ? 's' : ''}!`,
     cpuScores: (points: number) => `CPU scores ${points} point${points > 1 ? 's' : ''}!`,
     dealingNewCards: "Dealing new cards...",
-    allCardsPlayed: "All cards have been played!",
 
     // GameOverDialog
     congrats: "Congratulations, you won!",
