@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import type { Card, Decks, GameState, Player } from '@/types';
@@ -252,25 +252,19 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   return (
     <div className="w-full h-full relative">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr_auto] gap-x-2 lg:gap-x-4 gap-y-1 lg:gap-y-2 items-center p-4 md:p-6">
+       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-2 lg:gap-x-4 p-4 md:p-6 pt-16">
         
-        {/* Opponent's Hand (Top-Center) */}
-        <div className="col-start-2 self-start">
-            <PlayerHand cards={opponentHand} />
-        </div>
-        
-        {/* Deck Piles (Middle-Left) */}
-        <div className="row-start-2 justify-self-center">
+        <div className="flex items-center">
             <DeckPiles decks={decks} />
         </div>
 
-        {/* Game Table (Middle-Center) */}
-        <div className="row-start-2 col-start-2">
+        <div className="flex flex-col justify-between items-center gap-1 lg:gap-2">
+            <PlayerHand cards={opponentHand} />
             <GameTable cards={tableCards} />
+            <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
         
-        {/* Info Panel (Middle-Right) */}
-        <div className="row-start-2 col-start-3 justify-self-center">
+        <div className="flex items-center">
             <InfoPanel 
                 playerScore={scores.player}
                 opponentScore={scores.opponent}
@@ -278,11 +272,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
                 tableSum={tableSum}
                 hintCards={hintCards}
             />
-        </div>
-
-        {/* Player's Hand (Bottom-Center) */}
-        <div className="col-start-2 row-start-3 self-end">
-            <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
     </div>
 
