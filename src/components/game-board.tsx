@@ -24,6 +24,7 @@ export function GameBoard() {
   const [winner, setWinner] = useState<'player' | 'opponent' | 'tie' | null>(null);
   const [lastPlayedCardValue, setLastPlayedCardValue] = useState<number | null>(null);
   const [hintCards, setHintCards] = useState<Card[]>([]);
+  const [previousTableSum, setPreviousTableSum] = useState<number | null>(null);
 
   const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
 
@@ -49,6 +50,7 @@ export function GameBoard() {
     setLastPlayerToPlay(null);
     setWinner(null);
     setLastPlayedCardValue(null);
+    setPreviousTableSum(null);
     setHintCards([]);
     setGameState('playing');
   }, []);
@@ -62,6 +64,7 @@ export function GameBoard() {
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
     }
     setTableCards([]);
+    setPreviousTableSum(null);
   }, []);
   
   const switchTurn = useCallback(() => {
@@ -70,6 +73,9 @@ export function GameBoard() {
 
   const handlePlayCard = useCallback((card: Card) => {
     if (gameState !== 'playing' || currentPlayer !== 'player') return;
+
+    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
@@ -96,6 +102,9 @@ export function GameBoard() {
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
+
+    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card]) > 0);
@@ -189,6 +198,7 @@ export function GameBoard() {
         
         setTimeout(() => {
           setTableCards([]);
+          setPreviousTableSum(null);
           continueRoundOrEndGame();
         }, 2000);
       } else {
@@ -222,7 +232,7 @@ export function GameBoard() {
       <InfoPanel 
         playerScore={scores.player}
         opponentScore={scores.opponent}
-        lastPlayedCardValue={lastPlayedCardValue}
+        previousTableSum={previousTableSum}
         tableSum={tableSum}
         hintCards={hintCards}
       />

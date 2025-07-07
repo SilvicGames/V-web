@@ -5,7 +5,7 @@ import { GameCard } from './card';
 interface InfoPanelProps {
   playerScore: number;
   opponentScore: number;
-  lastPlayedCardValue: number | null;
+  previousTableSum: number | null;
   tableSum: number;
   hintCards: CardType[];
 }
@@ -18,18 +18,18 @@ const InfoItem = ({ label, value, className }: { label: string; value: React.Rea
 );
 
 
-export function InfoPanel({ playerScore, opponentScore, lastPlayedCardValue, tableSum, hintCards }: InfoPanelProps) {
+export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableSum, hintCards }: InfoPanelProps) {
   
   return (
     <div className="flex flex-col justify-around h-full gap-4 md:gap-6 py-8 text-foreground font-body">
         <InfoItem label="Puntos CPU" value={opponentScore} />
-        <InfoItem label="Anterior" value={lastPlayedCardValue ?? '—'} />
+        <InfoItem label="Anterior" value={previousTableSum ?? '—'} />
         <InfoItem label="Suma" value={tableSum > 0 ? tableSum : '—'} />
         
         <div className="flex flex-col gap-2">
             <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm text-foreground">Escoba</p>
             <div className="min-h-[90px] flex flex-wrap gap-1 justify-start items-center">
-                {hintCards.length > 0 ? (
+                {hintCards.length > 0 && (
                     hintCards.map(card => (
                         <GameCard 
                             key={`hint-${card.id}`} 
@@ -37,10 +37,6 @@ export function InfoPanel({ playerScore, opponentScore, lastPlayedCardValue, tab
                             size="small"
                         />
                     ))
-                ) : (
-                    <div className="w-full text-right pr-2">
-                        <p className="font-display text-2xl md:text-4xl text-shadow">—</p>
-                    </div>
                 )}
             </div>
         </div>
