@@ -22,7 +22,7 @@ export function InfoPanel({ playerScore, opponentScore, lastPlayedCardValue, tab
   
   return (
     <div className="flex flex-col justify-around h-full gap-4 md:gap-6 py-8 text-foreground font-body">
-        <InfoItem label="Tus Puntos" value={playerScore} />
+        <InfoItem label="Puntos CPU" value={opponentScore} />
         <InfoItem label="Anterior" value={lastPlayedCardValue ?? '—'} />
         <InfoItem label="Suma" value={tableSum > 0 ? tableSum : '—'} />
         
@@ -45,7 +45,7 @@ export function InfoPanel({ playerScore, opponentScore, lastPlayedCardValue, tab
             </div>
         </div>
         
-        <InfoItem label="Puntos Op." value={opponentScore} />
+        <InfoItem label="Puntos" value={playerScore} />
     </div>
   );
 }

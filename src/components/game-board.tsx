@@ -37,9 +37,16 @@ export function GameBoard() {
     setDecks(updatedDecks);
     setTableCards([]);
     setScores({ player: 0, opponent: 0 });
-    setCurrentPlayer('player');
+    
+    const startingPlayer: Player = Math.random() < 0.5 ? 'player' : 'opponent';
+    setCurrentPlayer(startingPlayer);
+    const initialMessage = startingPlayer === 'player' ? "¡Empiezas tú!" : "Empieza la CPU";
+    setGameMessage(initialMessage);
+    setTimeout(() => {
+      setGameMessage(prev => (prev === initialMessage ? null : prev));
+    }, 2000);
+
     setLastPlayerToPlay(null);
-    setGameMessage("Your turn to start!");
     setWinner(null);
     setLastPlayedCardValue(null);
     setHintCards([]);
@@ -85,7 +92,7 @@ export function GameBoard() {
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, playerHand, opponentHand]);
+  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -129,30 +136,11 @@ export function GameBoard() {
   }, [handleScore, opponentHand, switchTurn, tableCards, gameState]);
 
   useEffect(() => {
-    if (gameState === 'playing') {
-      let message: string | null = null;
-      let turnTimer: NodeJS.Timeout | undefined;
-  
-      if (currentPlayer === 'opponent' && opponentHand.length > 0) {
-        message = "Opponent's turn...";
-        turnTimer = setTimeout(opponentTurn, 1500);
-      } else if (currentPlayer === 'player' && playerHand.length > 0) {
-        message = "Your turn.";
-      }
-  
-      if (message) {
-        setGameMessage(message);
-        const clearMessageTimer = setTimeout(() => {
-          setGameMessage(prev => (prev === message ? null : prev));
-        }, 1500);
-  
-        return () => {
-          clearTimeout(clearMessageTimer);
-          if (turnTimer) clearTimeout(turnTimer);
-        };
-      }
+    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0) {
+      const turnTimer = setTimeout(opponentTurn, 1500);
+      return () => clearTimeout(turnTimer);
     }
-  }, [currentPlayer, opponentHand.length, playerHand.length, gameState, opponentTurn]);
+  }, [currentPlayer, opponentHand.length, gameState, opponentTurn]);
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'player' && playerHand.length > 0) {

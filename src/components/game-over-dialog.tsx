@@ -20,9 +20,9 @@ interface GameOverDialogProps {
 
 export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onPlayAgain }: GameOverDialogProps) {
   const getTitle = () => {
-    if (winner === 'player') return "Congratulations, You Win!";
-    if (winner === 'opponent') return "Better Luck Next Time!";
-    return "It's a Tie!";
+    if (winner === 'player') return "¡Enhorabuena, has ganado!";
+    if (winner === 'opponent') return "La CPU ha ganado";
+    return "¡Es un empate!";
   };
 
   const getIcon = () => {
@@ -40,11 +40,11 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
             {getTitle()}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-lg !mt-4 text-muted-foreground">
-            Final Score: You {playerScore} - {opponentScore} Opponent
+            Puntuación Final: Tú {playerScore} - {opponentScore} CPU
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Play Again</AlertDialogAction>
+          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Jugar de nuevo</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
