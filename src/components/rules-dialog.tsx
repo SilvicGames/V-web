@@ -23,7 +23,7 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body sm:max-w-xl">
+      <DialogContent className="bg-secondary/95 border-4 border-border/50 font-body sm:max-w-xl">
         <DialogHeader>
           <DialogTitle className="sr-only">{t.howToPlay}</DialogTitle>
           <VIcon className="mx-auto text-8xl" />

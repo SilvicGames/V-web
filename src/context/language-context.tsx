@@ -27,6 +27,7 @@ const translations = {
     sum: "Suma",
     broom: "Escoba",
     yourPoints: "Puntos",
+    noScoringPlays: "Sin jugadas con premio",
 
     // PlayerHand
     noCards: "Sin cartas",
@@ -73,6 +74,7 @@ const translations = {
     sum: "Sum",
     broom: "Broom",
     yourPoints: "Points",
+    noScoringPlays: "No scoring plays",
     
     // PlayerHand
     noCards: "No cards",

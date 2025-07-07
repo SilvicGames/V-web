@@ -11,39 +11,48 @@ interface InfoPanelProps {
   hintCards: CardType[];
 }
 
-const InfoItem = ({ label, value, className }: { label: string; value: React.ReactNode, className?: string }) => (
-    <div className={cn("flex justify-between items-baseline text-foreground", className)}>
-        <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm">{label}</p>
-        <p className="font-display text-2xl md:text-4xl text-shadow">{value}</p>
-    </div>
-);
-
-
 export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableSum, hintCards }: InfoPanelProps) {
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col justify-around h-full gap-4 md:gap-6 py-8 text-foreground font-body">
-        <InfoItem label={t.cpuPoints} value={opponentScore} />
-        <InfoItem label={t.previous} value={previousTableSum ?? '—'} />
-        <InfoItem label={t.sum} value={tableSum > 0 ? tableSum : '—'} />
-        
-        <div className="flex flex-col gap-2">
-            <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm text-foreground">{t.broom}</p>
-            <div className="min-h-[90px] flex gap-1 justify-center items-center">
-                {hintCards.length > 0 && (
-                    hintCards.map(card => (
-                        <GameCard 
-                            key={`hint-${card.id}`} 
-                            card={card} 
-                            size="small"
-                        />
-                    ))
-                )}
-            </div>
+    <div className="flex h-full flex-col justify-between rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body">
+      {/* Opponent Score */}
+      <div className="text-center">
+        <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.cpuPoints}</p>
+        <p className="font-display text-4xl md:text-5xl text-shadow">{opponentScore}</p>
+      </div>
+
+      {/* Game State Info */}
+      <div className="flex flex-col gap-3 my-4 bg-black/10 rounded-md p-3 border border-black/20">
+        <div className="flex justify-between items-baseline">
+          <p className="font-semibold uppercase text-xs md:text-sm">{t.previous}</p>
+          <p className="font-display text-xl md:text-2xl">{previousTableSum ?? '—'}</p>
         </div>
-        
-        <InfoItem label={t.yourPoints} value={playerScore} />
+        <div className="flex justify-between items-baseline">
+          <p className="font-semibold uppercase text-xs md:text-sm">{t.sum}</p>
+          <p className="font-display text-xl md:text-2xl">{tableSum > 0 ? tableSum : '—'}</p>
+        </div>
+      </div>
+
+      {/* Broom / Hints */}
+      <div className="flex flex-col gap-2 text-center">
+        <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.broom}</p>
+        <div className="min-h-[90px] rounded-md bg-black/20 flex flex-wrap gap-1 justify-center items-center p-2 border border-black/20">
+          {hintCards.length > 0 ? (
+            hintCards.map(card => (
+              <GameCard key={`hint-${card.id}`} card={card} size="small" />
+            ))
+          ) : (
+            <p className="text-xs text-muted-foreground p-2">{t.noScoringPlays}</p>
+          )}
+        </div>
+      </div>
+
+      {/* Player Score */}
+      <div className="text-center mt-4">
+        <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.yourPoints}</p>
+        <p className="font-display text-4xl md:text-5xl text-shadow text-primary">{playerScore}</p>
+      </div>
     </div>
   );
 }

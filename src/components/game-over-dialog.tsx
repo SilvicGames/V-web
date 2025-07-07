@@ -30,7 +30,7 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body w-full max-w-md text-center">
+      <AlertDialogContent className="bg-secondary/95 border-4 border-border/50 font-body w-full max-w-md text-center">
         <AlertDialogHeader className="items-center space-y-4">
           <div>
             <VIcon className="text-8xl" />
