@@ -1,22 +1,30 @@
 import type { Card as CardType } from '@/types';
 import { GameCard } from './card';
 import { useLanguage } from '@/context/language-context';
+import { VIcon } from './v-icon';
 
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="flex flex-col items-center gap-1 w-full">
-        <p className="font-semibold uppercase tracking-wider text-[10px] opacity-80 text-shadow-sm">{title}</p>
+        <p className="font-semibold uppercase tracking-wider text-[10px] opacity-80 text-shadow-sm text-center">{title}</p>
         {children}
     </div>
 );
 
 const InfoValue = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-12 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-10 w-full">
         {children}
     </div>
 );
 
+const ScoreValue = ({ children }: { children: React.ReactNode }) => (
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-14 w-full">
+        {children}
+    </div>
+);
+
+
 const InfoBroom = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-24 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-20 w-full">
         <div className="w-full h-full flex flex-row flex-nowrap gap-1 justify-center items-center">
            {children}
         </div>
@@ -36,20 +44,20 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
     <div className="flex flex-col w-full h-full justify-between gap-2 rounded-lg bg-secondary/40 p-2 shadow-inner text-foreground font-body">
       
         <InfoBlock title={t.cpuPoints}>
-           <InfoValue>
-                <p className="font-display text-5xl">{opponentScore}</p>
-           </InfoValue>
+           <ScoreValue>
+                <p className="font-display text-4xl">{opponentScore}</p>
+           </ScoreValue>
         </InfoBlock>
         
-        <InfoBlock title="Suma Jugada">
+        <InfoBlock title={t.sum}>
             <InfoValue>
-                <p className="font-display text-5xl">{tableSum > 0 ? tableSum : ''}</p>
+                <p className="font-display text-3xl">{tableSum > 0 ? tableSum : ''}</p>
             </InfoValue>
         </InfoBlock>
         
-        <InfoBlock title="Anterior Jugada">
+        <InfoBlock title={t.previous}>
             <InfoValue>
-                <p className="font-display text-5xl">{previousTableSum ?? ''}</p>
+                <p className="font-display text-3xl">{previousTableSum ?? ''}</p>
             </InfoValue>
         </InfoBlock>
         
@@ -59,15 +67,15 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
                     hintCards.map(card => (
                     <GameCard key={`hint-${card.id}`} card={card} size="small" />
                     ))
-                : null
+                : <VIcon className="text-6xl text-black/20"/>
                 }
             </InfoBroom>
         </InfoBlock>
 
         <InfoBlock title={t.yourPoints}>
-            <InfoValue>
-                <p className={`font-display text-5xl text-primary`}>{playerScore}</p>
-            </InfoValue>
+            <ScoreValue>
+                <p className={`font-display text-4xl text-primary`}>{playerScore}</p>
+            </ScoreValue>
         </InfoBlock>
 
     </div>
