@@ -59,7 +59,7 @@ export function GameBoard() {
     setupGame();
   }, [setupGame]);
 
-  const handleScore = useCallback((scoringPlayer: Player, points: number) => {
+  const handleScore = useCallback((scoringPlayer: Player, points: number, capturedCards: Card[]) => {
     if (points > 0) {
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
     }
@@ -89,7 +89,7 @@ export function GameBoard() {
       setTableCards(newTableCards);
       setGameMessage(`¡Sumas ${points} punto${points > 1 ? 's' : ''}!`);
       setTimeout(() => {
-        handleScore('player', points);
+        handleScore('player', points, newTableCards);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -131,7 +131,7 @@ export function GameBoard() {
       setTableCards(newTableCards);
       setGameMessage(`¡Oponente suma ${points} punto${points > 1 ? 's' : ''}!`);
       setTimeout(() => {
-        handleScore('opponent', points);
+        handleScore('opponent', points, newTableCards);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -168,7 +168,7 @@ export function GameBoard() {
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
-        setGameMessage("Dealing new hands...");
+        setGameMessage("Repartiendo nuevas cartas...");
         setTimeout(() => {
             setPlayerHand(newPlayerHand);
             setOpponentHand(newOpponentHand);
@@ -177,7 +177,7 @@ export function GameBoard() {
             setGameMessage(null);
         }, 2000);
     } else {
-        setGameMessage("All cards have been played!");
+        setGameMessage("¡Se han jugado todas las cartas!");
         setTimeout(() => setGameState('gameOver'), 2000);
     }
   }, [decks]);
@@ -242,13 +242,13 @@ export function GameBoard() {
           <motion.div
             key={gameMessage}
             initial={{ opacity: 0, y: 50, scale: 0.3 }}
-            animate={{ opacity: 1, y: 0, scale: gameState === 'scoring' ? 1.2 : 1 }}
+            animate={{ opacity: 1, y: 0, scale: gameState === 'scoring' ? 1.3 : 1 }}
             exit={{ opacity: 0, y: -50, scale: 0.5 }}
-            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className={cn(
                 "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 z-50 text-center font-display",
                 gameState === 'scoring'
-                    ? "bg-primary/90 border-ring/80 text-primary-foreground text-4xl text-shadow-lg"
+                    ? "bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg"
                     : "bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow"
             )}
             >
