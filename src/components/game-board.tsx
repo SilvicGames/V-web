@@ -51,13 +51,13 @@ export function GameBoard() {
 
   const handleScore = useCallback((scoringPlayer: Player, points: number, from: string) => {
     if (points > 0) {
-      const sum = tableCards.reduce((acc, card) => acc + card.value, 0);
+      const sum = points * 5;
       setLastScoringPlaySum(sum);
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
       setGameMessage(`${scoringPlayer === 'player' ? 'You' : 'Opponent'} scored ${points} point${points > 1 ? 's' : ''}!`);
     }
     setTableCards([]);
-  }, [tableCards]);
+  }, []);
   
   const switchTurn = useCallback(() => {
     setCurrentPlayer(p => (p === 'player' ? 'opponent' : 'player'));

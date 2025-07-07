@@ -13,7 +13,7 @@ const SuitDisplay = ({ suit, className }: { suit: Suit, className?: string}) => 
             color: 'text-card-foreground'
         }
     }
-    return <span className={cn(suitMap[suit].color, 'font-sans', className)}>{suitMap[suit].symbol}</span>
+    return <span className={cn('font-sans', className, suitMap[suit].color)}>{suitMap[suit].symbol}</span>
 }
 
 interface CardProps {
@@ -58,8 +58,8 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
         <span className={cn('font-display text-6xl text-shadow', suitColor)}>{card.value}</span>
       </div>
 
-      <div className="flex justify-end transform rotate-180">
-        <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm" />
+      <div className={cn("flex justify-end", suitColor)}>
+        <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm transform rotate-180" />
       </div>
     </div>
   );
