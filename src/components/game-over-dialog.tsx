@@ -39,7 +39,7 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
       <AlertDialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body w-full max-w-md text-center">
         <AlertDialogHeader className="items-center space-y-4">
           <div>{getIcon()}</div>
-          <AlertDialogTitle className="font-display text-4xl sm:text-5xl leading-tight text-shadow-lg text-primary-foreground tracking-wider text-center">
+          <AlertDialogTitle className="font-display text-3xl sm:text-4xl leading-tight text-shadow-lg text-primary-foreground text-center">
             {getTitle()}
           </AlertDialogTitle>
           <div className="!mt-6">
