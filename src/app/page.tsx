@@ -25,18 +25,18 @@ function GamePage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setIsRulesOpen(true)}
-            className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
-          >
-            {t.howToPlay}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
             onClick={handleNewGame}
             className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
           >
             {t.newGame}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsRulesOpen(true)}
+            className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
+          >
+            {t.howToPlay}
           </Button>
           <LanguageSwitcher />
         </div>

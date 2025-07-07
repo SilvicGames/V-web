@@ -48,7 +48,6 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
                     <li>{t.rulesScoring1}</li>
                     <li>{t.rulesScoring2}</li>
                     <li>{t.rulesScoring3}</li>
-                    <li>{t.rulesScoring4}</li>
                 </ul>
             </div>
         </ScrollArea>

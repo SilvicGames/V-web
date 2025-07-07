@@ -166,9 +166,11 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       }, 1500);
     } else {
       setTableCards(newTableCards);
+      switchTurn();
+      setGameState('turn-transition');
       setTimeout(() => {
-        switchTurn();
-      }, 500);
+        setGameState('playing');
+      }, 300);
     }
   }, [handleScore, opponentHand, switchTurn, tableCards, gameState, t]);
 
@@ -180,7 +182,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [currentPlayer, opponentHand.length, gameState, opponentTurn, isPaused]);
 
   useEffect(() => {
-    if (gameState === 'playing' && currentPlayer === 'player' && playerHand.length > 0) {
+    if (currentPlayer === 'player' && playerHand.length > 0 && (gameState === 'playing' || gameState === 'turn-transition')) {
         const possiblePlays = playerHand.filter(card => {
             const potentialTable = [...tableCards, card];
             return calculateScore(potentialTable) > 0;
@@ -195,16 +197,11 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
-        setGameState('dealing');
-        setGameMessage(t.dealingNewCards);
-        setTimeout(() => {
-            setPlayerHand(newPlayerHand);
-            setOpponentHand(newOpponentHand);
-            setDecks(updatedDecks);
-            setPreviousTableSum(null);
-            setGameState('playing');
-            setGameMessage(null);
-        }, 2000);
+        setPlayerHand(newPlayerHand);
+        setOpponentHand(newOpponentHand);
+        setDecks(updatedDecks);
+        setPreviousTableSum(null);
+        setGameState('playing');
     } else {
         if (tableCards.length > 0 && lastPlayerToPlay) {
           const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
@@ -260,7 +257,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
         <div className="flex flex-col h-full justify-between gap-4 py-4">
           <PlayerHand cards={opponentHand} />
           <GameTable cards={tableCards} />
-          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
+          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
         
         <InfoPanel 

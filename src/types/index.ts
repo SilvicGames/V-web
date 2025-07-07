@@ -14,6 +14,6 @@ export type Decks = {
   high: Card[];
 };
 
-export type GameState = 'setup' | 'playing' | 'scoring' | 'dealing' | 'gameOver';
+export type GameState = 'setup' | 'playing' | 'scoring' | 'turn-transition' | 'gameOver';
 
 export type Language = 'es' | 'en';
