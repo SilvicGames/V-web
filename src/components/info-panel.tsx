@@ -34,7 +34,7 @@ export function InfoPanel({ playerScore, opponentScore, lastPlayedCardValue, tab
                         <GameCard 
                             key={`hint-${card.id}`} 
                             card={card} 
-                            className="w-14 h-20"
+                            size="small"
                         />
                     ))
                 ) : (

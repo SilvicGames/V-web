@@ -16,16 +16,23 @@ interface CardProps {
   onPlay?: (card: CardType) => void;
   isFaceDown?: boolean;
   className?: string;
+  size?: 'normal' | 'small';
 }
 
-export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false, className }: CardProps) {
+export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false, className, size = 'normal' }: CardProps) {
+  const isSmall = size === 'small';
+  
   if (isFaceDown || !card) {
     return (
       <div className={cn(
-        'w-20 h-28 bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex items-center justify-center border-2 border-neutral-800/50',
+        'bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex items-center justify-center border-2 border-neutral-800/50',
         'transform transition-transform',
+        isSmall ? 'w-14 h-20' : 'w-20 h-28',
         className)}>
-        <span className="font-display text-6xl text-primary text-shadow select-none">V</span>
+        <span className={cn(
+          "font-display text-primary text-shadow select-none",
+          isSmall ? 'text-4xl' : 'text-6xl'
+        )}>V</span>
       </div>
     );
   }
@@ -36,22 +43,32 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     <div
       onClick={() => isPlayable && onPlay?.(card)}
       className={cn(
-        'relative w-20 h-28 bg-card rounded-lg p-1 border-2 border-black/20',
+        'relative bg-card rounded-lg p-1 border-2 border-black/20',
         'shadow-[2px_3px_4px_rgba(0,0,0,0.3)]',
         'transform transition-transform duration-300',
         isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl' : 'cursor-default',
-        suitColor, 
+        suitColor,
+        isSmall ? 'w-14 h-20' : 'w-20 h-28',
         className
       )}
       aria-label={`Card with value ${card.value}`}
     >
-      <SuitDisplay suit={card.suit} className="absolute top-1 left-2 text-2xl text-shadow-sm" />
+      <SuitDisplay suit={card.suit} className={cn(
+        "absolute text-shadow-sm",
+        isSmall ? 'top-0.5 left-1 text-base' : 'top-1 left-2 text-2xl'
+      )} />
       
       <div className="h-full w-full flex justify-center items-center text-center select-none">
-        <span className={cn('font-display text-6xl text-shadow')}>{card.value}</span>
+        <span className={cn(
+            'font-display text-shadow',
+            isSmall ? 'text-4xl' : 'text-6xl'
+          )}>{card.value}</span>
       </div>
       
-      <SuitDisplay suit={card.suit} className="absolute bottom-1 right-2 text-2xl text-shadow-sm transform rotate-180" />
+      <SuitDisplay suit={card.suit} className={cn(
+        "absolute text-shadow-sm transform rotate-180",
+        isSmall ? 'bottom-0.5 right-1 text-base' : 'bottom-1 right-2 text-2xl'
+      )} />
     </div>
   );
 }
