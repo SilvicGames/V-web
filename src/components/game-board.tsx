@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
@@ -47,6 +48,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
     }
     setTableCards([]);
+    setPreviousTableSum(null);
   }, []);
   
   const switchTurn = useCallback(() => {
@@ -88,7 +90,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
         setGameState('gameOver');
     } else {
         handleScore(player, points, cards);
-        setPreviousTableSum(null);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -131,12 +132,11 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const handlePlayCard = useCallback((card: Card) => {
     if (isPaused || gameState !== 'playing' || currentPlayer !== 'player' || gameJustStarted) return;
 
-    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
-    setPreviousTableSum(currentTableSum);
+    setPreviousTableSum(tableCards.reduce((acc, c) => acc + c.value, 0));
+    setLastPlayedCardValue(card.value);
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
-    setLastPlayedCardValue(card.value);
 
     const newTableCards = [...tableCards, card];
     const points = calculateScore(newTableCards, false);
@@ -155,8 +155,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const opponentTurn = useCallback(() => {
     if (isPaused || opponentHand.length === 0 || gameState !== 'playing') return;
 
-    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
-    setPreviousTableSum(currentTableSum);
+    setPreviousTableSum(tableCards.reduce((acc, c) => acc + c.value, 0));
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card], false) > 0);
@@ -171,12 +170,13 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
     const finalCardToPlay = cardToPlay;
     
+    setLastPlayedCardValue(finalCardToPlay.value);
+    
     const newTableCards = [...tableCards, finalCardToPlay];
     const points = calculateScore(newTableCards, false);
     
     setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
     setLastPlayerToPlay('opponent');
-    setLastPlayedCardValue(finalCardToPlay.value);
     
     if (points > 0) {
       setScoringInfo({ player: 'opponent', points, cards: newTableCards });
@@ -223,13 +223,12 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
         setGameState('playing');
     } else {
         if (tableCards.length > 0 && lastPlayerToPlay) {
-          const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
           const points = calculateScore(tableCards, true);
 
           if (points > 0) {
-            setScoringInfo({ player: scoringPlayer, points, cards: tableCards, isEndOfGame: true });
+            setScoringInfo({ player: lastPlayerToPlay, points, cards: tableCards, isEndOfGame: true });
             setGameState('scoring'); 
-            setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
+            setGameMessage(lastPlayerToPlay === 'player' ? t.playerScores(points) : t.cpuScores(points));
           } else {
             setTableCards([]);
             setGameState('gameOver');
@@ -314,7 +313,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
               className={cn(
                 'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display',
                 gameState === 'scoring'
-                  ? 'mt-8 bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg'
+                  ? 'mt-8 bg-card-foreground/90 border-primary text-primary-foreground text-5xl text-shadow-lg'
                   : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow pointer-events-auto'
               )}
             >
