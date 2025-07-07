@@ -16,7 +16,11 @@ export interface GameBoardHandle {
   setupGame: () => void;
 }
 
-export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, ...props }, ref) => {
+interface GameBoardProps {
+  isPaused?: boolean;
+}
+
+export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused = false }, ref) => {
   const { t } = useLanguage();
   const [gameState, setGameState] = useState<GameState>('setup');
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
@@ -69,7 +73,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
   }, [setupGame]);
 
   useEffect(() => {
-    if (gameJustStarted) {
+    if (gameJustStarted && !isPaused) {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
       
@@ -80,7 +84,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
 
       return () => clearTimeout(timer);
     }
-  }, [gameJustStarted, currentPlayer, t]);
+  }, [gameJustStarted, currentPlayer, t, isPaused]);
 
 
   const handleScore = useCallback((scoringPlayer: Player, points: number, capturedCards: Card[]) => {
@@ -96,7 +100,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
   }, []);
 
   const handlePlayCard = useCallback((card: Card) => {
-    if (gameState !== 'playing' || currentPlayer !== 'player') return;
+    if (isPaused || gameState !== 'playing' || currentPlayer !== 'player') return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
     setPreviousTableSum(currentTableSum);
@@ -122,7 +126,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t]);
+  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -169,11 +173,11 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
   }, [handleScore, opponentHand, switchTurn, tableCards, gameState, t]);
 
   useEffect(() => {
-    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0) {
+    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0 && !isPaused) {
       const turnTimer = setTimeout(opponentTurn, 1500);
       return () => clearTimeout(turnTimer);
     }
-  }, [currentPlayer, opponentHand.length, gameState, opponentTurn]);
+  }, [currentPlayer, opponentHand.length, gameState, opponentTurn, isPaused]);
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'player' && playerHand.length > 0) {
@@ -235,8 +239,10 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
   }, [playerHand.length, opponentHand.length, gameState, handleEndOfHand]);
 
   useEffect(() => {
+    if (!isPaused) {
       checkRoundEnd();
-  }, [playerHand.length, opponentHand.length, checkRoundEnd]);
+    }
+  }, [playerHand.length, opponentHand.length, checkRoundEnd, isPaused]);
   
   useEffect(() => {
     if (gameState === 'gameOver') {
@@ -254,7 +260,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>(({ lang, onLangChange, 
         <div className="flex flex-col h-full justify-between gap-4 py-4">
           <PlayerHand cards={opponentHand} />
           <GameTable cards={tableCards} />
-          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
+          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
         </div>
         
         <InfoPanel 

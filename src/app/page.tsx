@@ -4,11 +4,13 @@ import { GameBoard, type GameBoardHandle } from '@/components/game-board';
 import { LanguageProvider, useLanguage } from '@/context/language-context';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import { Button } from '@/components/ui/button';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { RulesDialog } from '@/components/rules-dialog';
 
 function GamePage() {
   const { t } = useLanguage();
   const gameBoardRef = useRef<GameBoardHandle>(null);
+  const [isRulesOpen, setIsRulesOpen] = useState(false);
 
   const handleNewGame = () => {
     if (gameBoardRef.current) {
@@ -23,6 +25,14 @@ function GamePage() {
           <Button
             variant="outline"
             size="sm"
+            onClick={() => setIsRulesOpen(true)}
+            className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
+          >
+            {t.howToPlay}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
             onClick={handleNewGame}
             className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
           >
@@ -30,8 +40,9 @@ function GamePage() {
           </Button>
           <LanguageSwitcher />
         </div>
-        <GameBoard ref={gameBoardRef} />
+        <GameBoard ref={gameBoardRef} isPaused={isRulesOpen} />
       </div>
+      <RulesDialog isOpen={isRulesOpen} onClose={() => setIsRulesOpen(false)} />
     </main>
   );
 }
