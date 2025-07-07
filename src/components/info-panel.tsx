@@ -11,8 +11,8 @@ interface InfoPanelProps {
 
 const InfoItem = ({ label, value, className }: { label: string; value: React.ReactNode, className?: string }) => (
     <div className={cn("flex justify-between items-baseline text-foreground", className)}>
-        <p className="font-semibold uppercase tracking-wider text-sm md:text-base">{label}</p>
-        <p className="font-display text-2xl md:text-4xl text-shadow-sm">{value}</p>
+        <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm">{label}</p>
+        <p className="font-display text-2xl md:text-4xl text-shadow">{value}</p>
     </div>
 );
 

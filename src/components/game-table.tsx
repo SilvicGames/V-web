@@ -13,7 +13,7 @@ export function GameTable({ cards }: GameTableProps) {
             {cards.length > 0 ? (
               cards.map((card) => <GameCard key={card.id} card={card} />)
             ) : (
-              <p className="text-muted-foreground text-lg font-semibold">Table is empty</p>
+              <p className="text-muted-foreground text-lg font-semibold text-shadow-sm">Table is empty</p>
             )}
         </div>
       </div>

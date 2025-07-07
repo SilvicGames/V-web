@@ -5,7 +5,7 @@ interface DeckPilesProps {
 }
 
 const DeckPile = ({ count, label }: { count: number; label: string }) => (
-  <div className="relative w-28 h-20 bg-card-foreground rounded-lg shadow-lg flex flex-col items-center justify-center border-2 border-neutral-700 text-primary p-2">
+  <div className="relative w-28 h-20 bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center border-2 border-neutral-800/50 text-primary p-2">
     <p className="font-display text-4xl leading-none text-shadow-sm select-none">{label}</p>
     <span className="absolute bottom-2 right-3 font-display text-xl text-foreground text-shadow-sm select-none">{count}</span>
   </div>

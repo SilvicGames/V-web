@@ -28,10 +28,10 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
   if (isFaceDown || !card) {
     return (
       <div className={cn(
-        'w-20 h-28 bg-card-foreground rounded-md shadow-lg flex items-center justify-center border-2 border-neutral-700',
+        'w-20 h-28 bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex items-center justify-center border-2 border-neutral-800/50',
         'transform transition-transform',
         className)}>
-        <span className="font-display text-6xl text-primary text-shadow-sm select-none">V</span>
+        <span className="font-display text-6xl text-primary text-shadow select-none">V</span>
       </div>
     );
   }
@@ -42,15 +42,16 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     <div
       onClick={() => isPlayable && onPlay?.(card)}
       className={cn(
-        'relative w-20 h-28 bg-card rounded-md shadow-lg p-2 flex flex-col justify-between border border-black/10',
+        'relative w-20 h-28 bg-card rounded-lg p-2 flex flex-col justify-between border-2 border-black/20',
+        'shadow-[2px_3px_4px_rgba(0,0,0,0.3)]',
         'transform transition-transform duration-300',
-        isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-2xl' : 'cursor-default',
+        isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl' : 'cursor-default',
         className
       )}
       aria-label={`Card with value ${card.value}`}
     >
       <div className="flex justify-start">
-          <SuitDisplay suit={card.suit} className="text-2xl" />
+          <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm" />
       </div>
 
       <div className="text-center select-none">
@@ -58,7 +59,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
       </div>
 
       <div className="flex justify-end transform rotate-180">
-        <SuitDisplay suit={card.suit} className="text-2xl" />
+        <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm" />
       </div>
     </div>
   );

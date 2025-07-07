@@ -12,8 +12,14 @@ interface PlayerHandProps {
 
 export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false, isDealing }: PlayerHandProps) {
   return (
-    <div className={cn("w-full transition-all duration-500", isTurn && 'p-1 bg-primary/20 rounded-lg')}>
-      <div className="flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2">
+    <div className={cn(
+        "w-full transition-all duration-500 rounded-lg", 
+        isTurn ? 'p-1 bg-primary/20' : 'p-1 border-transparent'
+      )}>
+      <div className={cn(
+        "flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2 rounded-lg",
+        isPlayer && "bg-secondary/40 shadow-inner"
+        )}>
         {isDealing && <p className="text-foreground text-xl font-semibold">Dealing cards...</p>}
         {!isDealing && cards.length > 0 && (
           cards.map((card, index) => (

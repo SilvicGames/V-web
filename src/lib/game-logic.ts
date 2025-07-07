@@ -18,11 +18,12 @@ export function createDecks(): Decks {
   const mid: Card[] = [];
   const high: Card[] = [];
 
+  // Suit is a visual distinction applied on deal.
   const createCard = (value: number, type: string, index: number): Card => {
     return {
       id: `${type}-${value}-${index}`,
       value: value,
-      suit: Math.random() > 0.5 ? 'hearts' : 'spades',
+      suit: 'hearts', // Placeholder suit, will be assigned on deal
     };
   };
 
@@ -63,20 +64,21 @@ export function dealCards(
     high: [...decks.high],
   };
 
-  const draw = (deck: Card[], count: number, hand: Card[]) => {
-    const drawn = deck.splice(0, count);
-    hand.push(...drawn);
+  const draw = (deck: Card[], count: number) => {
+    return deck.splice(0, count);
   };
   
-  const dealToHand = (hand: Card[]) => {
-      draw(updatedDecks.low, 2, hand);
-      draw(updatedDecks.mid, 1, hand);
-      draw(updatedDecks.high, 2, hand);
+  const dealToHand = (hand: Card[], suit: Suit) => {
+      let drawnCards: Card[] = [];
+      drawnCards.push(...draw(updatedDecks.low, 2));
+      drawnCards.push(...draw(updatedDecks.mid, 1));
+      drawnCards.push(...draw(updatedDecks.high, 2));
+      hand.push(...drawnCards.map(c => ({...c, suit})));
   }
 
   if (updatedDecks.low.length >= 4 && updatedDecks.mid.length >= 2 && updatedDecks.high.length >= 4) {
-      dealToHand(playerHand);
-      dealToHand(opponentHand);
+      dealToHand(playerHand, 'hearts');
+      dealToHand(opponentHand, 'spades');
        return {
         newPlayerHand: playerHand,
         newOpponentHand: opponentHand,
@@ -95,26 +97,12 @@ export function calculateScore(allCards: Card[]): number {
   }
   
   const tableSum = allCards.reduce((acc, card) => acc + card.value, 0);
-  const playedCard = allCards[allCards.length - 1];
-  const tableWasEmpty = allCards.length === 1;
 
-  if (tableWasEmpty && playedCard.value === 5) {
-    return 0;
+  // Rule: score points if the sum of cards is a multiple of 5.
+  // 1 point for every 5 (e.g., a sum of 15 is 3 points).
+  if (tableSum > 0 && tableSum % 5 === 0) {
+    return tableSum / 5;
   }
 
-  if (tableSum % 5 !== 0) {
-    return 0;
-  }
-
-  let points = 0;
-
-  if (tableSum === 5) {
-    points = 1;
-  } else {
-    points += Math.floor(tableSum / 10);
-  }
-
-  points += allCards.filter(card => card.value === 5).length;
-
-  return points;
+  return 0;
 }
