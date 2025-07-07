@@ -1,5 +1,7 @@
 # V
 
+Enlace a la versión web del juego: https://silvicgames.github.io/V-web/
+
 Juego de cartas de hacer múltiplos de 5.
 La baraja de cartas consta de 50 cartas con 20 cartas del 1 al 4, 20 cartas del 6 al 9 y 10 cartas del 5. 
 Cada jugador empieza con 5 cartas: 2 cartas tiene que ser del 1 al 4, 2 del 6 al 9 y 1 carta de un 5. 
