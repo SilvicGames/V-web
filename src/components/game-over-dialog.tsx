@@ -8,8 +8,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Trophy, Frown, Handshake } from 'lucide-react';
 import { useLanguage } from "@/context/language-context";
+import { VIcon } from "./v-icon";
 
 interface GameOverDialogProps {
   isOpen: boolean;
@@ -28,18 +28,14 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
     return t.tie;
   };
 
-  const getIcon = () => {
-    if (winner === 'player') return <Trophy className="w-16 h-16 text-primary drop-shadow-lg" />;
-    if (winner === 'opponent') return <Frown className="w-16 h-16 text-muted-foreground drop-shadow-lg" />;
-    return <Handshake className="w-16 h-16 text-foreground drop-shadow-lg" />;
-  }
-
   return (
     <AlertDialog open={isOpen}>
       <AlertDialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body w-full max-w-md text-center">
         <AlertDialogHeader className="items-center space-y-4">
-          <div>{getIcon()}</div>
-          <AlertDialogTitle className="text-3xl sm:text-4xl leading-tight text-shadow-lg text-primary text-center">
+          <div>
+            <VIcon className="text-8xl" />
+          </div>
+          <AlertDialogTitle className="text-3xl sm:text-4xl leading-tight text-primary text-center">
             {getTitle()}
           </AlertDialogTitle>
           <div className="!mt-6">

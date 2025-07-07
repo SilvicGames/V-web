@@ -3,12 +3,12 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { VIcon } from "./v-icon";
 
 interface RulesDialogProps {
   isOpen: boolean;
@@ -24,9 +24,7 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="font-display text-6xl text-primary text-shadow-lg text-center">
-            V
-          </DialogTitle>
+          <VIcon className="mx-auto text-6xl" />
         </DialogHeader>
         <ScrollArea className="h-[60vh] md:h-[50vh] pr-4">
             <div className="space-y-4 text-foreground/90">
