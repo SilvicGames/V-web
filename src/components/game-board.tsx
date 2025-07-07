@@ -176,7 +176,6 @@ export function GameBoard() {
             setPlayerHand(newPlayerHand);
             setOpponentHand(newOpponentHand);
             setDecks(updatedDecks);
-            setTableCards([]); // Keep table cards for next round
             setPreviousTableSum(null);
             setGameState('playing');
             setGameMessage(null);
@@ -248,21 +247,40 @@ export function GameBoard() {
 
       <AnimatePresence>
         {gameMessage && (
-          <motion.div
-            key={gameMessage}
-            initial={gameState === 'scoring' ? { opacity: 0, y: -50, scale: 0.3 } : { opacity: 0, y: 50, scale: 0.3 }}
-            animate={{ opacity: 1, y: 0, scale: gameState === 'scoring' ? 1.3 : 1 }}
-            exit={gameState === 'scoring' ? { opacity: 0, y: -50, scale: 0.5 } : { opacity: 0, y: 50, scale: 0.5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+          <div
             className={cn(
-                "absolute left-1/2 -translate-x-1/2 backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 z-50 text-center font-display",
-                gameState === 'scoring'
-                    ? "top-8 bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg"
-                    : "top-1/2 -translate-y-1/2 bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow"
+              'absolute inset-0 z-50 flex justify-center pointer-events-none',
+              gameState === 'scoring' ? 'items-start' : 'items-center'
             )}
+          >
+            <motion.div
+              key={gameMessage}
+              initial={
+                gameState === 'scoring'
+                  ? { opacity: 0, y: -50, scale: 0.3 }
+                  : { opacity: 0, y: 50, scale: 0.3 }
+              }
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: gameState === 'scoring' ? 1.3 : 1,
+              }}
+              exit={
+                gameState === 'scoring'
+                  ? { opacity: 0, y: -50, scale: 0.5 }
+                  : { opacity: 0, y: 50, scale: 0.5 }
+              }
+              transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+              className={cn(
+                'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display pointer-events-auto',
+                gameState === 'scoring'
+                  ? 'mt-8 bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg'
+                  : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow'
+              )}
             >
-            {gameMessage}
-          </motion.div>
+              {gameMessage}
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
 
