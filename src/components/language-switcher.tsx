@@ -15,7 +15,7 @@ export function LanguageSwitcher() {
       variant="outline"
       size="sm"
       onClick={toggleLanguage}
-      className="absolute top-2 right-2 bg-background/50 hover:bg-background/80 border-border/50 text-foreground z-20"
+      className="bg-background/50 hover:bg-background/80 border-border/50 text-foreground"
     >
       {language === 'es' ? 'English' : 'Español'}
     </Button>

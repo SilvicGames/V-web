@@ -18,8 +18,8 @@ function GamePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-2 sm:p-4 bg-gray-900">
-      <div className="relative w-full max-w-7xl aspect-[21/9] bg-background rounded-lg shadow-2xl p-4 md:p-6 border-4 border-gray-800/50">
-        <div className="absolute top-2 right-2 flex items-center gap-2 z-20">
+      <div className="relative w-full max-w-7xl aspect-[16/9] bg-background rounded-lg shadow-2xl p-4 md:p-6 border-4 border-gray-800/50">
+        <div className="absolute top-4 right-4 flex items-center gap-2 z-20">
           <Button
             variant="outline"
             size="sm"

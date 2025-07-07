@@ -73,7 +73,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
       const timer = setTimeout(() => {
-        setGameMessage(prev => (prev === initialMessage ? null : prev));
+        setGameMessage(null);
       }, 2000);
       setGameJustStarted(false);
       return () => clearTimeout(timer);

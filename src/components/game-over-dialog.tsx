@@ -8,7 +8,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { PartyPopper, Trophy, Frown } from 'lucide-react';
+import { Trophy, Frown, Handshake } from 'lucide-react';
 import { useLanguage } from "@/context/language-context";
 
 interface GameOverDialogProps {
@@ -29,25 +29,35 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
   };
 
   const getIcon = () => {
-    if (winner === 'player') return <Trophy className="w-8 h-8 text-accent" />;
-    if (winner === 'opponent') return <Frown className="w-8 h-8 text-foreground/60" />;
-    return <PartyPopper className="w-8 h-8 text-primary" />;
+    if (winner === 'player') return <Trophy className="w-16 h-16 text-primary drop-shadow-lg" />;
+    if (winner === 'opponent') return <Frown className="w-16 h-16 text-muted-foreground drop-shadow-lg" />;
+    return <Handshake className="w-16 h-16 text-foreground drop-shadow-lg" />;
   }
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent className="bg-secondary border-border">
-        <AlertDialogHeader>
-          <AlertDialogTitle className="flex items-center justify-center gap-2 text-2xl">
-            {getIcon()}
+      <AlertDialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body w-full max-w-md text-center">
+        <AlertDialogHeader className="items-center space-y-4">
+          <div>{getIcon()}</div>
+          <AlertDialogTitle className="font-display text-5xl text-shadow-lg text-primary-foreground tracking-wider">
             {getTitle()}
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center text-lg !mt-4 text-muted-foreground">
-            {t.finalScore}: {t.you} {playerScore} - {opponentScore} {t.cpu}
-          </AlertDialogDescription>
+          <div className="!mt-6">
+            <AlertDialogDescription className="text-center text-xl text-foreground/90 font-semibold">
+                {t.finalScore}
+            </AlertDialogDescription>
+            <p className="font-display text-4xl text-shadow text-primary-foreground">
+                {t.you} {playerScore} - {opponentScore} {t.cpu}
+            </p>
+          </div>
         </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">{t.playAgain}</AlertDialogAction>
+        <AlertDialogFooter className="mt-4">
+          <AlertDialogAction 
+            onClick={onPlayAgain} 
+            className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-display text-2xl py-6 rounded-lg tracking-wide"
+          >
+            {t.playAgain}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
