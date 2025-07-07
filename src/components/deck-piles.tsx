@@ -1,9 +1,5 @@
 import type { Decks } from '@/types';
 
-interface DeckPilesProps {
-  decks: Decks;
-}
-
 const DeckPile = ({ count, label }: { count: number; label: string }) => (
     <div className="relative w-24 h-32 flex items-center justify-center">
         <div className="relative w-20 h-28">
@@ -26,7 +22,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 
 export function DeckPiles({ decks }: DeckPilesProps) {
   return (
-    <div className="flex flex-row items-center justify-center gap-8">
+    <div className="flex flex-col items-center justify-center gap-8">
         {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <div className="w-24 h-32"/>}
         {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <div className="w-24 h-32"/>}
         {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <div className="w-24 h-32"/>}
