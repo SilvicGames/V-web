@@ -30,7 +30,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
         
         <div className="flex flex-col gap-2">
             <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm text-foreground">{t.broom}</p>
-            <div className="min-h-[90px] flex flex-wrap gap-1 justify-center items-center">
+            <div className="min-h-[90px] flex gap-1 justify-center items-center">
                 {hintCards.length > 0 && (
                     hintCards.map(card => (
                         <GameCard 

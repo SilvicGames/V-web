@@ -72,10 +72,13 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
     if (gameJustStarted) {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
-      setGameJustStarted(false); // Reset the flag
+      
       const timer = setTimeout(() => {
-        setGameMessage(null);
+        // Only clear the message if it's still the initial message
+        setGameMessage(msg => msg === initialMessage ? null : msg);
+        setGameJustStarted(false); // Reset the flag *after* the timeout
       }, 2000);
+
       return () => clearTimeout(timer);
     }
   }, [gameJustStarted, currentPlayer, t]);
@@ -227,7 +230,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
           setTimeout(() => setGameState('gameOver'), 2000);
         }
     }
-  }, [decks, t, tableCards, lastPlayerToPlay, scores]);
+  }, [decks, t, tableCards, lastPlayerToPlay]);
 
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
