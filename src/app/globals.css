@@ -74,6 +74,7 @@
     text-shadow: 1px 1px 2px rgb(0 0 0 / 0.2);
   }
   .text-outline {
+    color: hsl(var(--primary));
     text-shadow:
       -2px -2px 0 hsl(var(--card-foreground)),  
        2px -2px 0 hsl(var(--card-foreground)),

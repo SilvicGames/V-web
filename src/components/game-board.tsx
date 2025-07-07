@@ -251,8 +251,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   return (
     <div className="w-full h-full relative">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_220px] lg:grid-cols-[auto_1fr_250px] gap-2 lg:gap-6 items-center p-4 md:p-6">
-        <div className="h-full flex flex-col justify-around py-4">
+       <div className="w-full h-full grid grid-cols-[auto_1fr_220px] lg:grid-cols-[auto_1fr_250px] gap-2 lg:gap-6 items-center p-4 md:p-6 pt-16">
+        <div className="h-full flex flex-col justify-center">
           <DeckPiles decks={decks} />
         </div>
         <div className="flex flex-col h-full justify-between gap-2 py-4">

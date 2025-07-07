@@ -22,7 +22,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 
 export function DeckPiles({ decks }: { decks: Decks }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-8">
+    <div className="flex h-full flex-col items-center justify-around gap-8 rounded-lg bg-secondary/40 p-4 shadow-inner">
         {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <div className="w-24 h-32"/>}
         {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <div className="w-24 h-32"/>}
         {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <div className="w-24 h-32"/>}
