@@ -41,7 +41,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col w-full h-full justify-between gap-2 rounded-lg bg-secondary/40 px-8 py-2 shadow-inner text-foreground font-body">
+    <div className="flex flex-col w-full h-full justify-between gap-2 rounded-lg bg-secondary/40 px-7 py-2 shadow-inner text-foreground font-body">
       
         <InfoBlock title={t.cpuPoints}>
            <ScoreValue>
