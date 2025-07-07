@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import type { Card, Decks, GameState, Player } from '@/types';
 import { createDecks, dealCards, calculateScore } from '@/lib/game-logic';
 import { PlayerHand } from './player-hand';
@@ -12,7 +12,11 @@ import { InfoPanel } from './info-panel';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/context/language-context';
 
-export function GameBoard() {
+export interface GameBoardHandle {
+  setupGame: () => void;
+}
+
+export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
   const { t } = useLanguage();
   const [gameState, setGameState] = useState<GameState>('setup');
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
@@ -27,6 +31,7 @@ export function GameBoard() {
   const [lastPlayedCardValue, setLastPlayedCardValue] = useState<number | null>(null);
   const [hintCards, setHintCards] = useState<Card[]>([]);
   const [previousTableSum, setPreviousTableSum] = useState<number | null>(null);
+  const [gameJustStarted, setGameJustStarted] = useState(false);
 
   const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
 
@@ -44,23 +49,37 @@ export function GameBoard() {
     const startingPlayer: Player = Math.random() < 0.5 ? 'player' : 'opponent';
     setCurrentPlayer(startingPlayer);
     
-    const initialMessage = startingPlayer === 'player' ? t.playerStarts : t.cpuStarts;
-    setGameMessage(initialMessage);
-    setTimeout(() => {
-      setGameMessage(prev => (prev === initialMessage ? null : prev));
-    }, 2000);
-
     setLastPlayerToPlay(null);
     setWinner(null);
     setLastPlayedCardValue(null);
     setPreviousTableSum(null);
     setHintCards([]);
+    setGameJustStarted(true); // Signal that game has just started/restarted
     setGameState('playing');
-  }, [t]);
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    setupGame: () => {
+      setupGame();
+    },
+  }));
 
   useEffect(() => {
     setupGame();
   }, [setupGame]);
+
+  useEffect(() => {
+    if (gameJustStarted) {
+      const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
+      setGameMessage(initialMessage);
+      const timer = setTimeout(() => {
+        setGameMessage(prev => (prev === initialMessage ? null : prev));
+      }, 2000);
+      setGameJustStarted(false);
+      return () => clearTimeout(timer);
+    }
+  }, [gameJustStarted, currentPlayer, t]);
+
 
   const handleScore = useCallback((scoringPlayer: Player, points: number, capturedCards: Card[]) => {
     if (points > 0) {
@@ -293,4 +312,5 @@ export function GameBoard() {
       />
     </div>
   );
-}
+});
+GameBoard.displayName = "GameBoard";

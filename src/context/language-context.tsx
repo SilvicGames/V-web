@@ -37,6 +37,9 @@ const translations = {
     // PlayerHand
     dealing: "Repartiendo...",
     noCards: "Sin cartas",
+
+    // Page
+    newGame: "Nueva Partida",
   },
   en: {
     // GameBoard
@@ -70,6 +73,9 @@ const translations = {
     // PlayerHand
     dealing: "Dealing...",
     noCards: "No cards",
+    
+    // Page
+    newGame: "New Game",
   },
 };
 
