@@ -201,7 +201,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
         setOpponentHand(newOpponentHand);
         setDecks(updatedDecks);
         setGameState('playing');
-        // Do not reset previousTableSum here
     } else {
         if (tableCards.length > 0 && lastPlayerToPlay) {
           const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
@@ -253,17 +252,17 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     <div className="w-full h-full absolute inset-0 p-6">
        <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-6">
         
-        <div className="flex items-center w-40">
+        <div className="flex items-center w-44">
             <DeckPiles decks={decks} />
         </div>
 
-        <div className="flex flex-col justify-between items-center">
+        <div className="flex flex-col justify-between items-center gap-2 min-h-0">
             <PlayerHand cards={opponentHand} isPlayer={false} />
             <GameTable cards={tableCards} />
             <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
         
-        <div className="flex items-center w-40">
+        <div className="flex items-center w-44">
             <InfoPanel 
                 playerScore={scores.player}
                 opponentScore={scores.opponent}
