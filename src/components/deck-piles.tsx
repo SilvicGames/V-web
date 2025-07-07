@@ -20,7 +20,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 const EmptyDeckPile = ({ label }: { label: string }) => (
     <div className="relative w-24 h-32 flex items-center justify-center">
         <div className="relative w-20 h-28">
-            <div className="absolute top-0 left-0 w-full h-full bg-black/20 rounded-lg shadow-inner flex flex-col items-center justify-center border-2 border-neutral-600/50 text-neutral-500 p-2">
+            <div className="absolute top-0 left-0 w-full h-full bg-black/10 rounded-lg flex flex-col items-center justify-center border border-black/20 text-neutral-500 p-2">
                 <p className="font-display text-4xl leading-none select-none">{label}</p>
                 <span className="absolute bottom-1 right-2 font-display text-2xl select-none">0</span>
             </div>
