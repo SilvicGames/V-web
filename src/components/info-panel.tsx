@@ -19,18 +19,18 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
       {/* Opponent Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.cpuPoints}</p>
-        <p className="font-display text-4xl md:text-5xl text-shadow">{opponentScore}</p>
+        <p className="font-display text-5xl md:text-6xl text-shadow">{opponentScore}</p>
       </div>
 
       {/* Game State Info */}
       <div className="flex flex-col gap-3 my-2 bg-black/10 rounded-md p-3 border border-black/20">
         <div className="flex justify-between items-baseline">
-          <p className="font-semibold uppercase text-xs md:text-sm">{t.previous}</p>
-          <p className="font-display text-xl md:text-2xl">{previousTableSum ?? '—'}</p>
+          <p className="font-semibold uppercase text-xs md:text-sm">{t.sum}</p>
+          <p className="font-display text-xl md:text-2xl">{tableSum > 0 ? tableSum : ''}</p>
         </div>
         <div className="flex justify-between items-baseline">
-          <p className="font-semibold uppercase text-xs md:text-sm">{t.sum}</p>
-          <p className="font-display text-xl md:text-2xl">{tableSum > 0 ? tableSum : '—'}</p>
+          <p className="font-semibold uppercase text-xs md:text-sm">{t.previous}</p>
+          <p className="font-display text-xl md:text-2xl">{previousTableSum ?? ''}</p>
         </div>
       </div>
 
@@ -38,20 +38,18 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
       <div className="flex flex-col gap-2 text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.broom}</p>
         <div className="min-h-[7.5rem] rounded-md bg-black/20 flex flex-row flex-wrap gap-1 justify-center items-center p-2 border border-black/20">
-          {hintCards.length > 0 ? (
+          {hintCards.length > 0 &&
             hintCards.map(card => (
               <GameCard key={`hint-${card.id}`} card={card} size="small" />
             ))
-          ) : (
-            <p className="text-xs text-muted-foreground p-2">{t.noScoringPlays}</p>
-          )}
+          }
         </div>
       </div>
 
       {/* Player Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.yourPoints}</p>
-        <p className="font-display text-4xl md:text-5xl text-shadow text-primary">{playerScore}</p>
+        <p className={cn("font-display text-5xl md:text-6xl text-outline")}>{playerScore}</p>
       </div>
     </div>
   );
