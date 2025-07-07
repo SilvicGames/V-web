@@ -4,16 +4,10 @@ import { cn } from '@/lib/utils';
 
 const SuitDisplay = ({ suit, className }: { suit: Suit, className?: string}) => {
     const suitMap = {
-        hearts: {
-            symbol: '♥',
-            color: 'text-primary'
-        },
-        spades: {
-            symbol: '♠',
-            color: 'text-card-foreground'
-        }
+        hearts: { symbol: '♥' },
+        spades: { symbol: '♠' }
     }
-    return <span className={cn('font-sans', suitMap[suit].color, className)}>{suitMap[suit].symbol}</span>
+    return <span className={cn('font-sans', className)}>{suitMap[suit].symbol}</span>
 }
 
 interface CardProps {
@@ -46,6 +40,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
         'shadow-[2px_3px_4px_rgba(0,0,0,0.3)]',
         'transform transition-transform duration-300',
         isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl' : 'cursor-default',
+        suitColor, 
         className
       )}
       aria-label={`Card with value ${card.value}`}
@@ -53,7 +48,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
       <SuitDisplay suit={card.suit} className="absolute top-1 left-2 text-2xl text-shadow-sm" />
       
       <div className="h-full w-full flex justify-center items-center text-center select-none">
-        <span className={cn('font-display text-6xl text-shadow', suitColor)}>{card.value}</span>
+        <span className={cn('font-display text-6xl text-shadow')}>{card.value}</span>
       </div>
       
       <SuitDisplay suit={card.suit} className="absolute bottom-1 right-2 text-2xl text-shadow-sm transform rotate-180" />
