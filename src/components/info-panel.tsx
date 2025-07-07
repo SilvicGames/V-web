@@ -24,7 +24,7 @@ const ScoreValue = ({ children, className }: { children: React.ReactNode, classN
 
 
 const InfoBroom = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-24 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-28 w-full">
         <div className="w-full h-full flex flex-row flex-nowrap gap-1 justify-center items-center">
            {children}
         </div>
@@ -41,7 +41,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col w-full h-full justify-between gap-2 rounded-lg bg-secondary/40 p-2 shadow-inner text-foreground font-body">
+    <div className="flex flex-col w-full h-full justify-between gap-2 rounded-lg bg-secondary/40 px-4 py-2 shadow-inner text-foreground font-body">
       
         <InfoBlock title={t.cpuPoints}>
            <ScoreValue>
