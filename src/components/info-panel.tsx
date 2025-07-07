@@ -5,7 +5,7 @@ import { VIcon } from './v-icon';
 
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="flex flex-col items-center gap-1 w-full">
-        <p className="font-semibold uppercase tracking-wider text-[20px] opacity-80 text-shadow-sm text-center">{title}</p>
+        <p className="font-semibold uppercase tracking-wider text-[14px] opacity-80 text-shadow-sm text-center">{title}</p>
         {children}
     </div>
 );
