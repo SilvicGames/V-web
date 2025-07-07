@@ -24,3 +24,4 @@ Empieza cogiendo las 5 cartas el jugador que NO ha repartido en esta partida y l
 Se repite el proceso de lanzamiento de cartas a la mesa hasta que se acaben las cartas de los 3 montones. 
 Cuando se agoten todas las cartas de los montones y de las manos de los jugadores, finaliza la partida. 
 Se recuentan los puntos y gana el jugador que tenga más.
+
