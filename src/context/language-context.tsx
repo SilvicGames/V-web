@@ -23,7 +23,7 @@ const translations = {
 
     // InfoPanel
     cpuPoints: "Puntos CPU",
-    previous: "Anterior Jugada",
+    previous: "Suma Anterior",
     sum: "Suma Jugada",
     broom: "Escoba",
     yourPoints: "Puntos",
@@ -69,7 +69,7 @@ const translations = {
 
     // InfoPanel
     cpuPoints: "CPU Points",
-    previous: "Previous Play",
+    previous: "Previous Sum",
     sum: "Play Sum",
     broom: "Broom",
     yourPoints: "Points",
