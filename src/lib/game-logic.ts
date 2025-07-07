@@ -117,8 +117,11 @@ export function calculateScore(allCards: Card[], isLastPlayOfTheGame = false): n
     points += tableSum / 10;
   } else { 
     // For multiples of 5 (that are not multiples of 10):
-    // 1 point for the capture, plus 1 extra point for every 25 in the sum.
-    points += 1 + Math.floor(tableSum / 25);
+    if (tableSum < 25) { // Covers 5 and 15
+        points += 1;
+    } else { // Covers 25, 35, 45, etc.
+        points += (tableSum - 5) / 10;
+    }
   }
 
   // Rule: Add bonus points for each '5' card captured
