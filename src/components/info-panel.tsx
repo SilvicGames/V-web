@@ -15,7 +15,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col w-36 justify-between gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body h-full">
+    <div className="flex flex-col w-44 justify-between gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body h-full">
       {/* Opponent Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.cpuPoints}</p>
@@ -37,7 +37,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
       {/* Broom / Hints */}
       <div className="flex flex-col gap-2 text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.broom}</p>
-        <div className="h-28 rounded-md bg-black/20 flex flex-wrap gap-1 justify-center items-center p-2 border border-black/20">
+        <div className="min-h-[7.5rem] rounded-md bg-black/20 flex flex-row flex-wrap gap-1 justify-center items-center p-2 border border-black/20">
           {hintCards.length > 0 ? (
             hintCards.map(card => (
               <GameCard key={`hint-${card.id}`} card={card} size="small" />

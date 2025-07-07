@@ -251,15 +251,15 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [gameState, scores]);
 
   return (
-    <div className="w-full h-full relative">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-2 lg:gap-x-4 p-4 md:p-6 pt-16">
+    <div className="w-full h-full absolute inset-0">
+       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-2 lg:gap-x-4 p-4 md:p-6">
         
         <div className="flex items-center">
             <DeckPiles decks={decks} />
         </div>
 
         <div className="flex flex-col justify-between items-center gap-1 lg:gap-2">
-            <PlayerHand cards={opponentHand} />
+            <PlayerHand cards={opponentHand} isPlayer={false} />
             <GameTable cards={tableCards} />
             <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
