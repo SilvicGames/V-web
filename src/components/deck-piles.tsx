@@ -3,14 +3,12 @@ import type { Decks } from '@/types';
 const DeckPile = ({ count, label }: { count: number; label: string }) => (
     <div className="relative w-24 h-32 flex items-center justify-center">
         <div className="relative w-20 h-28">
-            {/* Under cards for stack effect, peeking from bottom right */}
             {count > 2 && (
                 <div className="absolute top-1.5 left-1.5 w-full h-full bg-card-foreground rounded-lg border-2 border-neutral-800/50" />
             )}
             {count > 1 && (
                 <div className="absolute top-1 left-1 w-full h-full bg-card-foreground rounded-lg border-2 border-neutral-800/50" />
             )}
-            {/* Top card with info */}
             <div className="absolute top-0 left-0 w-full h-full bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex flex-col items-center justify-center border-2 border-neutral-800/50 text-primary p-2">
                 <p className="font-display text-4xl leading-none text-shadow-sm select-none">{label}</p>
                 <span className="absolute bottom-1 right-2 font-display text-2xl text-foreground text-shadow-sm select-none">{count}</span>
@@ -22,7 +20,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 const EmptyDeckPile = ({ label }: { label: string }) => (
     <div className="relative w-24 h-32 flex items-center justify-center">
         <div className="relative w-20 h-28">
-            <div className="absolute top-0 left-0 w-full h-full bg-black/20 rounded-lg shadow-inner flex flex-col items-center justify-center border-2 border-dashed border-neutral-600 text-neutral-500 p-2">
+            <div className="absolute top-0 left-0 w-full h-full bg-black/20 rounded-lg shadow-inner flex flex-col items-center justify-center border-2 border-neutral-600/50 text-neutral-500 p-2">
                 <p className="font-display text-4xl leading-none select-none">{label}</p>
                 <span className="absolute bottom-1 right-2 font-display text-2xl select-none">0</span>
             </div>
