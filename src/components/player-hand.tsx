@@ -14,27 +14,22 @@ export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false
   const { t } = useLanguage();
   return (
     <div className={cn(
-        "w-full transition-all duration-500 rounded-lg", 
-        isTurn ? 'p-1 bg-primary/20' : 'p-1 border-transparent'
+      "w-full flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2 rounded-lg bg-secondary/40 shadow-inner"
       )}>
-      <div className={cn(
-        "flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2 rounded-lg bg-secondary/40 shadow-inner"
-        )}>
-        {cards.length > 0 && (
-          cards.map((card, index) => (
-            <GameCard 
-              key={isPlayer ? card.id : `opponent-card-${index}`} 
-              card={card} 
-              isPlayable={isPlayer && isTurn} 
-              onPlay={onPlayCard} 
-              isFaceDown={!isPlayer} 
-            />
-          ))
-        )}
-         {cards.length === 0 && (
-          <p className="text-muted-foreground font-semibold">{t.noCards}</p>
-        )}
-      </div>
+      {cards.length > 0 && (
+        cards.map((card, index) => (
+          <GameCard 
+            key={isPlayer ? card.id : `opponent-card-${index}`} 
+            card={card} 
+            isPlayable={isPlayer && isTurn} 
+            onPlay={onPlayCard} 
+            isFaceDown={!isPlayer} 
+          />
+        ))
+      )}
+       {cards.length === 0 && (
+        <p className="text-muted-foreground font-semibold">{t.noCards}</p>
+      )}
     </div>
   );
 }

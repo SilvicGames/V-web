@@ -20,8 +20,8 @@ function GamePage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-2 sm:p-4 bg-gray-900">
-      <div className="relative w-full max-w-7xl aspect-[16/9] bg-background rounded-lg shadow-2xl border-4 border-gray-800/50 flex flex-col">
-        <div className="flex items-center gap-2 p-4">
+      <div className="w-full max-w-7xl flex flex-col gap-2">
+        <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -40,7 +40,7 @@ function GamePage() {
           </Button>
           <LanguageSwitcher />
         </div>
-        <div className="flex-grow relative">
+        <div className="relative w-full aspect-[16/9] bg-background rounded-lg shadow-2xl border-4 border-gray-800/50">
           <GameBoard ref={gameBoardRef} isPaused={isRulesOpen} />
         </div>
       </div>
