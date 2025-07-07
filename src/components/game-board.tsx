@@ -9,6 +9,7 @@ import { DeckPiles } from './deck-piles';
 import { GameOverDialog } from './game-over-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import { InfoPanel } from './info-panel';
+import { cn } from '@/lib/utils';
 
 export function GameBoard() {
   const [gameState, setGameState] = useState<GameState>('setup');
@@ -19,7 +20,7 @@ export function GameBoard() {
   const [scores, setScores] = useState({ player: 0, opponent: 0 });
   const [currentPlayer, setCurrentPlayer] = useState<Player>('player');
   const [lastPlayerToPlay, setLastPlayerToPlay] = useState<Player | null>(null);
-  const [gameMessage, setGameMessage] = useState<string | null>(null);
+  const [gameMessage, setGameMessage] =useState<string | null>(null);
   const [winner, setWinner] = useState<'player' | 'opponent' | 'tie' | null>(null);
   const [lastPlayedCardValue, setLastPlayedCardValue] = useState<number | null>(null);
   const [hintCards, setHintCards] = useState<Card[]>([]);
@@ -78,12 +79,13 @@ export function GameBoard() {
         handleScore('player', points);
         switchTurn();
         setGameState('playing');
+        setGameMessage(null);
       }, 1500);
     } else {
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
+  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, playerHand, opponentHand]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -116,6 +118,7 @@ export function GameBoard() {
         handleScore('opponent', points);
         switchTurn();
         setGameState('playing');
+        setGameMessage(null);
       }, 1500);
     } else {
       setTableCards(newTableCards);
@@ -125,16 +128,31 @@ export function GameBoard() {
     }
   }, [handleScore, opponentHand, switchTurn, tableCards, gameState]);
 
-
   useEffect(() => {
-    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0) {
-      setGameMessage("Opponent's turn...");
-      const timer = setTimeout(opponentTurn, 1500);
-      return () => clearTimeout(timer);
-    } else if (gameState === 'playing' && currentPlayer === 'player') {
-       setGameMessage("Your turn.");
+    if (gameState === 'playing') {
+      let message: string | null = null;
+      let turnTimer: NodeJS.Timeout | undefined;
+  
+      if (currentPlayer === 'opponent' && opponentHand.length > 0) {
+        message = "Opponent's turn...";
+        turnTimer = setTimeout(opponentTurn, 1500);
+      } else if (currentPlayer === 'player' && playerHand.length > 0) {
+        message = "Your turn.";
+      }
+  
+      if (message) {
+        setGameMessage(message);
+        const clearMessageTimer = setTimeout(() => {
+          setGameMessage(prev => (prev === message ? null : prev));
+        }, 1500);
+  
+        return () => {
+          clearTimeout(clearMessageTimer);
+          if (turnTimer) clearTimeout(turnTimer);
+        };
+      }
     }
-  }, [currentPlayer, opponentHand, gameState, opponentTurn]);
+  }, [currentPlayer, opponentHand.length, playerHand.length, gameState, opponentTurn]);
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'player' && playerHand.length > 0) {
@@ -159,6 +177,7 @@ export function GameBoard() {
             setOpponentHand(newOpponentHand);
             setDecks(updatedDecks);
             setGameState('playing');
+            setGameMessage(null);
         }, 2000);
     } else {
         setGameMessage("All cards have been played!");
@@ -169,7 +188,7 @@ export function GameBoard() {
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
       if (tableCards.length > 0 && lastPlayerToPlay) {
-        setGameState('scoring'); // To prevent further plays
+        setGameState('scoring'); 
         const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
         const points = calculateScore(tableCards);
 
@@ -185,7 +204,6 @@ export function GameBoard() {
           continueRoundOrEndGame();
         }, 2000);
       } else {
-        // No cards on table, proceed directly
         continueRoundOrEndGame();
       }
     }
@@ -193,7 +211,7 @@ export function GameBoard() {
 
   useEffect(() => {
       checkRoundEnd();
-  }, [playerHand, opponentHand, checkRoundEnd]);
+  }, [playerHand.length, opponentHand.length, checkRoundEnd]);
   
   useEffect(() => {
     if (gameState === 'gameOver') {
@@ -223,16 +241,21 @@ export function GameBoard() {
 
       <AnimatePresence>
         {gameMessage && (
-            <motion.div
-            key="game-message"
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ duration: 0.5 }}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary/80 backdrop-blur-sm p-3 px-6 rounded-lg shadow-lg border-2 border-border/50 text-center font-semibold z-50"
+          <motion.div
+            key={gameMessage}
+            initial={{ opacity: 0, y: 50, scale: 0.3 }}
+            animate={{ opacity: 1, y: 0, scale: gameState === 'scoring' ? 1.2 : 1 }}
+            exit={{ opacity: 0, y: -50, scale: 0.5 }}
+            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+            className={cn(
+                "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 z-50 text-center font-display",
+                gameState === 'scoring'
+                    ? "bg-primary/90 border-ring/80 text-primary-foreground text-4xl text-shadow-lg"
+                    : "bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow"
+            )}
             >
             {gameMessage}
-            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
 
