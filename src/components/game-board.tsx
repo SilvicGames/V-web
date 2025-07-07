@@ -176,6 +176,8 @@ export function GameBoard() {
             setPlayerHand(newPlayerHand);
             setOpponentHand(newOpponentHand);
             setDecks(updatedDecks);
+            setTableCards([]); // Keep table cards for next round
+            setPreviousTableSum(null);
             setGameState('playing');
             setGameMessage(null);
         }, 2000);
@@ -248,15 +250,15 @@ export function GameBoard() {
         {gameMessage && (
           <motion.div
             key={gameMessage}
-            initial={{ opacity: 0, y: 50, scale: 0.3 }}
+            initial={gameState === 'scoring' ? { opacity: 0, y: -50, scale: 0.3 } : { opacity: 0, y: 50, scale: 0.3 }}
             animate={{ opacity: 1, y: 0, scale: gameState === 'scoring' ? 1.3 : 1 }}
-            exit={{ opacity: 0, y: -50, scale: 0.5 }}
+            exit={gameState === 'scoring' ? { opacity: 0, y: -50, scale: 0.5 } : { opacity: 0, y: 50, scale: 0.5 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className={cn(
-                "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 z-50 text-center font-display",
+                "absolute left-1/2 -translate-x-1/2 backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 z-50 text-center font-display",
                 gameState === 'scoring'
-                    ? "bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg"
-                    : "bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow"
+                    ? "top-8 bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg"
+                    : "top-1/2 -translate-y-1/2 bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow"
             )}
             >
             {gameMessage}
