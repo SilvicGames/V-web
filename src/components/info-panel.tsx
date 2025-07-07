@@ -24,7 +24,7 @@ const ScoreValue = ({ children, className }: { children: React.ReactNode, classN
 
 
 const InfoBroom = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-20 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-24 w-full">
         <div className="w-full h-full flex flex-row flex-nowrap gap-1 justify-center items-center">
            {children}
         </div>
