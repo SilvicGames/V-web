@@ -13,10 +13,6 @@ const translations = {
     cpuScores: (points: number) => `¡La CPU suma ${points} punto${points > 1 ? 's' : ''}!`,
     dealingNewCards: "Repartiendo nuevas cartas...",
     allCardsPlayed: "¡Se han jugado todas las cartas!",
-    playerTakesLast: (points: number) => `Te llevas las últimas por ${points} punto${points > 1 ? 's' : ''}!`,
-    cpuTakesLast: (points: number) => `La CPU se lleva las últimas por ${points} punto${points > 1 ? 's' : ''}!`,
-    playerTakesLastNoPoints: "Las últimas cartas son para ti. Sin puntos.",
-    cpuTakesLastNoPoints: "Las últimas cartas son para la CPU. Sin puntos.",
 
     // GameOverDialog
     congrats: "¡Enhorabuena, has ganado!",
@@ -49,10 +45,6 @@ const translations = {
     cpuScores: (points: number) => `CPU scores ${points} point${points > 1 ? 's' : ''}!`,
     dealingNewCards: "Dealing new cards...",
     allCardsPlayed: "All cards have been played!",
-    playerTakesLast: (points: number) => `You take the last cards for ${points} point${points > 1 ? 's' : ''}!`,
-    cpuTakesLast: (points: number) => `CPU takes the last cards for ${points} point${points > 1 ? 's' : ''}!`,
-    playerTakesLastNoPoints: "The last cards are yours. No points.",
-    cpuTakesLastNoPoints: "The last cards are for the CPU. No points.",
 
     // GameOverDialog
     congrats: "Congratulations, you won!",

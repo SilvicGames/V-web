@@ -72,10 +72,10 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
     if (gameJustStarted) {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
+      setGameJustStarted(false); // Set to false immediately to prevent re-triggering
       const timer = setTimeout(() => {
         setGameMessage(null);
       }, 2000);
-      setGameJustStarted(false);
       return () => clearTimeout(timer);
     }
   }, [gameJustStarted, currentPlayer, t]);
@@ -202,23 +202,26 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
     } else {
         // No more cards to deal. Game is over. Process final cards.
         if (tableCards.length > 0 && lastPlayerToPlay) {
-          setGameState('scoring'); 
           const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
           const points = calculateScore(tableCards);
 
           if (points > 0) {
-            setGameMessage(scoringPlayer === 'player' ? t.playerTakesLast(points) : t.cpuTakesLast(points));
+            setGameState('scoring'); 
+            setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
             setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
+            
+            setTimeout(() => {
+              setTableCards([]);
+              setPreviousTableSum(null);
+              setGameMessage(t.allCardsPlayed);
+              setTimeout(() => setGameState('gameOver'), 2000);
+            }, 2000);
           } else {
-            setGameMessage(scoringPlayer === 'player' ? t.playerTakesLastNoPoints : t.cpuTakesLastNoPoints);
-          }
-          
-          setTimeout(() => {
             setTableCards([]);
             setPreviousTableSum(null);
             setGameMessage(t.allCardsPlayed);
             setTimeout(() => setGameState('gameOver'), 2000);
-          }, 2000);
+          }
         } else {
           setGameMessage(t.allCardsPlayed);
           setTimeout(() => setGameState('gameOver'), 2000);
