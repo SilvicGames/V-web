@@ -42,7 +42,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     <div
       onClick={() => isPlayable && onPlay?.(card)}
       className={cn(
-        'relative w-20 h-28 bg-card rounded-lg p-1 flex flex-col justify-center items-center border-2 border-black/20',
+        'relative w-20 h-28 bg-card rounded-lg p-1 border-2 border-black/20',
         'shadow-[2px_3px_4px_rgba(0,0,0,0.3)]',
         'transform transition-transform duration-300',
         isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl' : 'cursor-default',
@@ -52,7 +52,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     >
       <SuitDisplay suit={card.suit} className="absolute top-1 left-2 text-2xl text-shadow-sm" />
       
-      <div className="text-center select-none">
+      <div className="h-full w-full flex justify-center items-center text-center select-none">
         <span className={cn('font-display text-6xl text-shadow', suitColor)}>{card.value}</span>
       </div>
       

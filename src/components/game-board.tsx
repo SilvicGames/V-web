@@ -21,7 +21,7 @@ export function GameBoard() {
   const [lastPlayerToPlay, setLastPlayerToPlay] = useState<Player | null>(null);
   const [gameMessage, setGameMessage] = useState<string | null>(null);
   const [winner, setWinner] = useState<'player' | 'opponent' | 'tie' | null>(null);
-  const [lastScoringPlaySum, setLastScoringPlaySum] = useState<number | null>(null);
+  const [lastPlayedCardValue, setLastPlayedCardValue] = useState<number | null>(null);
   const [hintCards, setHintCards] = useState<Card[]>([]);
 
   const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
@@ -40,7 +40,7 @@ export function GameBoard() {
     setLastPlayerToPlay(null);
     setGameMessage("Your turn to start!");
     setWinner(null);
-    setLastScoringPlaySum(null);
+    setLastPlayedCardValue(null);
     setHintCards([]);
     setGameState('playing');
   }, []);
@@ -49,10 +49,8 @@ export function GameBoard() {
     setupGame();
   }, [setupGame]);
 
-  const handleScore = useCallback((scoringPlayer: Player, points: number, from: string) => {
+  const handleScore = useCallback((scoringPlayer: Player, points: number) => {
     if (points > 0) {
-      const sum = points * 5;
-      setLastScoringPlaySum(sum);
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
       setGameMessage(`${scoringPlayer === 'player' ? 'You' : 'Opponent'} scored ${points} point${points > 1 ? 's' : ''}!`);
     }
@@ -68,6 +66,7 @@ export function GameBoard() {
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
+    setLastPlayedCardValue(card.value);
 
     const newTableCards = [...tableCards, card];
     setTableCards(newTableCards);
@@ -76,7 +75,7 @@ export function GameBoard() {
     
     if (points > 0) {
       setTimeout(() => {
-        handleScore('player', points, 'play');
+        handleScore('player', points);
         switchTurn();
       }, 1500);
     } else {
@@ -99,6 +98,7 @@ export function GameBoard() {
     if (!cardToPlay) return;
 
     const finalCardToPlay = cardToPlay;
+    setLastPlayedCardValue(finalCardToPlay.value);
     
     const newTableCards = [...tableCards, finalCardToPlay];
     const points = calculateScore(newTableCards);
@@ -109,7 +109,7 @@ export function GameBoard() {
     
     if (points > 0) {
       setTimeout(() => {
-        handleScore('opponent', points, 'opponent play');
+        handleScore('opponent', points);
         switchTurn();
       }, 1500);
     } else {
@@ -145,7 +145,6 @@ export function GameBoard() {
   const checkRoundEnd = useCallback(() => {
     if(playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing'){
         setGameState('dealing');
-        setLastScoringPlaySum(null);
         const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
         
         if (cardsDealt) {
@@ -188,7 +187,7 @@ export function GameBoard() {
       <InfoPanel 
         playerScore={scores.player}
         opponentScore={scores.opponent}
-        lastPlaySum={lastScoringPlaySum}
+        lastPlayedCardValue={lastPlayedCardValue}
         tableSum={tableSum}
         hintCards={hintCards}
       />
