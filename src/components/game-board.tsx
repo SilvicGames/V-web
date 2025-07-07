@@ -99,7 +99,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, []);
 
   const handlePlayCard = useCallback((card: Card) => {
-    if (isPaused || gameState !== 'playing' || currentPlayer !== 'player') return;
+    if (isPaused || gameState !== 'playing' || currentPlayer !== 'player' || gameJustStarted) return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
 
@@ -114,9 +114,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.playerScores(points));
-      setPreviousTableSum(currentTableSum + card.value);
+      const newScoreValue = currentTableSum + card.value;
       setTimeout(() => {
         handleScore('player', points, newTableCards);
+        setPreviousTableSum(newScoreValue);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -125,7 +126,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused]);
+  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused, gameJustStarted]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -156,9 +157,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.cpuScores(points));
-      setPreviousTableSum(currentTableSum + finalCardToPlay.value);
+      const newScoreValue = currentTableSum + finalCardToPlay.value;
       setTimeout(() => {
         handleScore('opponent', points, newTableCards);
+        setPreviousTableSum(newScoreValue);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -197,6 +199,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
+        setPreviousTableSum(null);
         setPlayerHand(newPlayerHand);
         setOpponentHand(newOpponentHand);
         setDecks(updatedDecks);
@@ -209,11 +212,12 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
           if (points > 0) {
             setGameState('scoring'); 
             setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
+            const newScoreValue = tableCards.reduce((acc, c) => acc + c.value, 0);
             
             setTimeout(() => {
               setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
               setTableCards([]);
-              setPreviousTableSum(null);
+              setPreviousTableSum(newScoreValue);
               setGameMessage(null);
               setGameState('gameOver');
             }, 2000);
@@ -252,17 +256,17 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     <div className="w-full h-full absolute inset-0 p-6">
        <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-6">
         
-        <div className="flex items-center w-44">
+        <div className="flex items-center w-48">
             <DeckPiles decks={decks} />
         </div>
 
         <div className="flex flex-col justify-between items-center gap-2 min-h-0">
             <PlayerHand cards={opponentHand} isPlayer={false} />
             <GameTable cards={tableCards} />
-            <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
+            <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing' && !gameJustStarted} onPlayCard={handlePlayCard} />
         </div>
         
-        <div className="flex items-center w-44">
+        <div className="flex items-center w-48">
             <InfoPanel 
                 playerScore={scores.player}
                 opponentScore={scores.opponent}
