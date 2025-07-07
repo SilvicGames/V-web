@@ -36,6 +36,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const [hintCards, setHintCards] = useState<Card[]>([]);
   const [previousTableSum, setPreviousTableSum] = useState<number | null>(null);
   const [gameJustStarted, setGameJustStarted] = useState(false);
+  const [scoringInfo, setScoringInfo] = useState<{player: Player; points: number; cards: Card[]; isEndOfGame?: boolean;} | null>(null);
 
   const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
 
@@ -98,6 +99,26 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setCurrentPlayer(p => (p === 'player' ? 'opponent' : 'player'));
   }, []);
 
+  const handleContinueAfterScoring = useCallback(() => {
+    if (!scoringInfo) return;
+    const { player, points, cards, isEndOfGame } = scoringInfo;
+
+    if (isEndOfGame) {
+        setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
+        setTableCards([]);
+        setGameMessage(null);
+        setGameState('gameOver');
+    } else {
+        handleScore(player, points, cards);
+        setPreviousTableSum(null);
+        switchTurn();
+        setGameState('playing');
+        setGameMessage(null);
+    }
+
+    setScoringInfo(null);
+  }, [scoringInfo, handleScore, switchTurn]);
+
   const handlePlayCard = useCallback((card: Card) => {
     if (isPaused || gameState !== 'playing' || currentPlayer !== 'player' || gameJustStarted) return;
 
@@ -112,21 +133,15 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     const points = calculateScore(newTableCards, false);
     
     if (points > 0) {
+      setScoringInfo({ player: 'player', points, cards: newTableCards });
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.playerScores(points));
-      setTimeout(() => {
-        handleScore('player', points, newTableCards);
-        setPreviousTableSum(null);
-        switchTurn();
-        setGameState('playing');
-        setGameMessage(null);
-      }, 1500);
     } else {
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused, gameJustStarted]);
+  }, [currentPlayer, gameState, isPaused, gameJustStarted, tableCards, t, switchTurn]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -155,16 +170,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setLastPlayedCardValue(finalCardToPlay.value);
     
     if (points > 0) {
+      setScoringInfo({ player: 'opponent', points, cards: newTableCards });
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.cpuScores(points));
-      setTimeout(() => {
-        handleScore('opponent', points, newTableCards);
-        setPreviousTableSum(null);
-        switchTurn();
-        setGameState('playing');
-        setGameMessage(null);
-      }, 1500);
     } else {
       setTableCards(newTableCards);
       switchTurn();
@@ -173,7 +182,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
         setGameState('playing');
       }, 300);
     }
-  }, [handleScore, opponentHand, switchTurn, tableCards, gameState, t]);
+  }, [opponentHand, gameState, tableCards, t, switchTurn]);
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0 && !isPaused && !gameJustStarted) {
@@ -209,15 +218,9 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
           const points = calculateScore(tableCards, true);
 
           if (points > 0) {
+            setScoringInfo({ player: scoringPlayer, points, cards: tableCards, isEndOfGame: true });
             setGameState('scoring'); 
             setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
-            
-            setTimeout(() => {
-              setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
-              setTableCards([]);
-              setGameMessage(null);
-              setGameState('gameOver');
-            }, 2000);
           } else {
             setTableCards([]);
             setGameState('gameOver');
@@ -276,9 +279,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       <AnimatePresence>
         {gameMessage && (
           <div
+            onClick={gameState === 'scoring' ? handleContinueAfterScoring : undefined}
             className={cn(
-              'absolute inset-0 z-50 flex justify-center pointer-events-none',
-              gameState === 'scoring' ? 'items-start' : 'items-center'
+              'absolute inset-0 z-50 flex justify-center',
+              gameState === 'scoring' ? 'items-start cursor-pointer' : 'items-center pointer-events-none'
             )}
           >
             <motion.div
@@ -300,10 +304,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
               }
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               className={cn(
-                'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display pointer-events-auto',
+                'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display',
                 gameState === 'scoring'
                   ? 'mt-8 bg-primary/90 border-ring/80 text-primary-foreground text-5xl text-shadow-lg'
-                  : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow'
+                  : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow pointer-events-auto'
               )}
             >
               {gameMessage}
