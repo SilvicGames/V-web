@@ -52,7 +52,6 @@ export function GameBoard() {
   const handleScore = useCallback((scoringPlayer: Player, points: number) => {
     if (points > 0) {
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
-      setGameMessage(`${scoringPlayer === 'player' ? 'You' : 'Opponent'} scored ${points} point${points > 1 ? 's' : ''}!`);
     }
     setTableCards([]);
   }, []);
@@ -72,10 +71,13 @@ export function GameBoard() {
     const points = calculateScore(newTableCards);
     
     if (points > 0) {
+      setGameState('scoring');
       setTableCards(newTableCards);
+      setGameMessage(`¡Sumas ${points} punto${points > 1 ? 's' : ''}!`);
       setTimeout(() => {
         handleScore('player', points);
         switchTurn();
+        setGameState('playing');
       }, 1500);
     } else {
       setTableCards(newTableCards);
@@ -84,7 +86,7 @@ export function GameBoard() {
   }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
 
   const opponentTurn = useCallback(() => {
-    if (opponentHand.length === 0) return;
+    if (opponentHand.length === 0 || gameState !== 'playing') return;
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card]) > 0);
@@ -107,10 +109,13 @@ export function GameBoard() {
     setLastPlayedCardValue(finalCardToPlay.value);
     
     if (points > 0) {
+      setGameState('scoring');
       setTableCards(newTableCards);
+      setGameMessage(`¡Oponente suma ${points} punto${points > 1 ? 's' : ''}!`);
       setTimeout(() => {
         handleScore('opponent', points);
         switchTurn();
+        setGameState('playing');
       }, 1500);
     } else {
       setTableCards(newTableCards);
@@ -118,7 +123,7 @@ export function GameBoard() {
         switchTurn();
       }, 500);
     }
-  }, [handleScore, opponentHand, switchTurn, tableCards]);
+  }, [handleScore, opponentHand, switchTurn, tableCards, gameState]);
 
 
   useEffect(() => {
@@ -164,15 +169,15 @@ export function GameBoard() {
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
       if (tableCards.length > 0 && lastPlayerToPlay) {
-        setGameState('dealing'); // To prevent further plays
+        setGameState('scoring'); // To prevent further plays
         const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
         const points = calculateScore(tableCards);
 
         if (points > 0) {
-          setGameMessage(`${scoringPlayer === 'player' ? 'You get' : 'Opponent gets'} the last cards for ${points} point${points > 1 ? 's' : ''}!`);
+          setGameMessage(`${scoringPlayer === 'player' ? 'Te llevas' : 'Oponente se lleva'} las últimas por ${points} punto${points > 1 ? 's' : ''}!`);
           setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
         } else {
-          setGameMessage(`Last cards go to the ${scoringPlayer === 'player' ? 'player' : 'opponent'}. No points.`);
+          setGameMessage(`Las últimas cartas son para ${scoringPlayer === 'player' ? 'ti' : 'el oponente'}. Sin puntos.`);
         }
         
         setTimeout(() => {
@@ -184,7 +189,7 @@ export function GameBoard() {
         continueRoundOrEndGame();
       }
     }
-  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, decks, continueRoundOrEndGame]);
+  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, continueRoundOrEndGame]);
 
   useEffect(() => {
       checkRoundEnd();
@@ -225,7 +230,6 @@ export function GameBoard() {
             exit={{ opacity: 0, y: -20, scale: 0.9 }}
             transition={{ duration: 0.5 }}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary/80 backdrop-blur-sm p-3 px-6 rounded-lg shadow-lg border-2 border-border/50 text-center font-semibold z-50"
-            onAnimationComplete={() => setTimeout(() => setGameMessage(null), 1500)}
             >
             {gameMessage}
             </motion.div>

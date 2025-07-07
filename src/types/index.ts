@@ -14,4 +14,4 @@ export type Decks = {
   high: Card[];
 };
 
-export type GameState = 'setup' | 'playing' | 'dealing' | 'gameOver';
+export type GameState = 'setup' | 'playing' | 'scoring' | 'dealing' | 'gameOver';
