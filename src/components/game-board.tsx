@@ -65,7 +65,7 @@ export function GameBoard() {
     const newTableCards = [...tableCards, card];
     setTableCards(newTableCards);
     
-    const points = calculateScore(tableCards, card);
+    const points = calculateScore(newTableCards);
 
     if (points > 0) {
       setTimeout(() => {
@@ -87,7 +87,7 @@ export function GameBoard() {
     const newTableCards = [...tableCards, cardToPlay];
     setTableCards(newTableCards);
     
-    const points = calculateScore(tableCards, cardToPlay);
+    const points = calculateScore(newTableCards);
 
     if (points > 0) {
       // Scoring play: wait longer to see the combination.

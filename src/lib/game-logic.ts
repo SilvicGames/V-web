@@ -82,12 +82,17 @@ export function dealCards(
 }
 
 
-export function calculateScore(tableCards: Card[], playedCard: Card): number {
-  const allCards = [...tableCards, playedCard];
+export function calculateScore(allCards: Card[]): number {
+  if (allCards.length === 0) {
+    return 0;
+  }
+  
   const tableSum = allCards.reduce((acc, card) => acc + card.value, 0);
+  const playedCard = allCards[allCards.length - 1];
+  const tableWasEmpty = allCards.length === 1;
 
   // Rule: no points if the table was empty and a 5 is played.
-  if (tableCards.length === 0 && playedCard.value === 5) {
+  if (tableWasEmpty && playedCard.value === 5) {
     return 0;
   }
 
