@@ -110,7 +110,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setLastPlayedCardValue(card.value);
 
     const newTableCards = [...tableCards, card];
-    const points = calculateScore(newTableCards);
+    const points = calculateScore(newTableCards, false);
     
     if (points > 0) {
       setGameState('scoring');
@@ -135,7 +135,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setPreviousTableSum(currentTableSum);
 
     let cardToPlay: Card | undefined;
-    const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card]) > 0);
+    const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card], false) > 0);
     
     if (scoringCards.length > 0) {
       cardToPlay = scoringCards[Math.floor(Math.random() * scoringCards.length)];
@@ -148,7 +148,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     const finalCardToPlay = cardToPlay;
     
     const newTableCards = [...tableCards, finalCardToPlay];
-    const points = calculateScore(newTableCards);
+    const points = calculateScore(newTableCards, false);
     
     setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
     setLastPlayerToPlay('opponent');
@@ -175,17 +175,17 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [handleScore, opponentHand, switchTurn, tableCards, gameState, t]);
 
   useEffect(() => {
-    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0 && !isPaused) {
+    if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0 && !isPaused && !gameJustStarted) {
       const turnTimer = setTimeout(opponentTurn, 1500);
       return () => clearTimeout(turnTimer);
     }
-  }, [currentPlayer, opponentHand.length, gameState, opponentTurn, isPaused]);
+  }, [currentPlayer, opponentHand.length, gameState, opponentTurn, isPaused, gameJustStarted]);
 
   useEffect(() => {
     if (currentPlayer === 'player' && playerHand.length > 0 && (gameState === 'playing' || gameState === 'turn-transition')) {
         const possiblePlays = playerHand.filter(card => {
             const potentialTable = [...tableCards, card];
-            return calculateScore(potentialTable) > 0;
+            return calculateScore(potentialTable, false) > 0;
         });
         setHintCards(possiblePlays);
     } else {
@@ -205,7 +205,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     } else {
         if (tableCards.length > 0 && lastPlayerToPlay) {
           const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
-          const points = calculateScore(tableCards);
+          const points = calculateScore(tableCards, true);
 
           if (points > 0) {
             setGameState('scoring'); 

@@ -90,7 +90,7 @@ export function dealCards(
 }
 
 
-export function calculateScore(allCards: Card[]): number {
+export function calculateScore(allCards: Card[], isLastPlayOfTheGame = false): number {
   if (allCards.length === 0) {
     return 0;
   }
@@ -101,9 +101,7 @@ export function calculateScore(allCards: Card[]): number {
     return 0;
   }
   
-  // Rule: no points if the capture consists of a single 5.
-  // This covers both playing a 5 on an empty table and having a single 5 left over.
-  if (allCards.length === 1 && allCards[0].value === 5) {
+  if (allCards.length === 1 && allCards[0].value === 5 && !isLastPlayOfTheGame) {
     return 0;
   }
   

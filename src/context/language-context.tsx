@@ -37,7 +37,7 @@ const translations = {
 
     // Rules Dialog
     close: "Cerrar",
-    rulesTitle: "Cómo Jugar: Escoba",
+    rulesTitlePart1: "Cómo Jugar: ",
     rulesObjectiveTitle: "Objetivo",
     rulesObjectiveText: "Sé el primer jugador en conseguir más puntos que tu oponente capturando cartas de la mesa.",
     rulesGameplayTitle: "Cómo Jugar",
@@ -50,7 +50,7 @@ const translations = {
     rulesScoringTitle: "Puntuación",
     rulesScoring1: "Si la suma de las cartas capturadas es un múltiplo de 10 (ej. 10, 20, 30), sumas tantos puntos como el resultado de dividir por 10 (ej. 1, 2, 3 puntos).",
     rulesScoring2: "Si la suma es un múltiplo de 5 pero no de 10 (ej. 5, 15, 25), sumas 1 punto.",
-    rulesScoring3: "Ganas 1 punto extra por cada carta con el valor '5' que captures. Sin embargo, si tu captura consiste únicamente en una sola carta de valor '5', no obtienes ningún punto por esa jugada.",
+    rulesScoring3: "Ganas 1 punto extra por cada carta con el valor '5' que captures. Sin embargo, si tu captura consiste únicamente en una sola carta de valor '5', no obtienes ningún punto por esa jugada, a no ser que sea la última jugada de la partida.",
   },
   en: {
     // GameBoard
@@ -84,7 +84,7 @@ const translations = {
 
     // Rules Dialog
     close: "Close",
-    rulesTitle: "How to Play: Broom",
+    rulesTitlePart1: "How to Play: ",
     rulesObjectiveTitle: "Objective",
     rulesObjectiveText: "Be the first player to score more points than your opponent by capturing cards from the table.",
     rulesGameplayTitle: "Gameplay",
@@ -97,7 +97,7 @@ const translations = {
     rulesScoringTitle: "Scoring",
     rulesScoring1: "If the sum of captured cards is a multiple of 10 (e.g., 10, 20, 30), you score that many points divided by 10 (e.g., 1, 2, 3 points).",
     rulesScoring2: "If the sum is a multiple of 5 but not 10 (e.g., 5, 15, 25), you score 1 point.",
-    rulesScoring3: "You get 1 extra point for each '5' card you capture. However, if your capture consists of only a single '5' card, you get no points for that play.",
+    rulesScoring3: "You get 1 extra point for each '5' card you capture. However, if your capture consists of only a single '5' card, you get no points for that play, unless it's the last play of the game.",
   },
 };
 

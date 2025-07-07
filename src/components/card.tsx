@@ -2,7 +2,7 @@
 import type { Card as CardType, Suit } from '@/types';
 import { cn } from '@/lib/utils';
 
-const SuitDisplay = ({ suit, className }: { suit: Suit, className?: string}) => {
+const SuitDisplay = ({ suit, className }: { suit: Suit, className?: string }) => {
     const suitMap = {
         hearts: { symbol: '♥' },
         spades: { symbol: '♠' }
@@ -26,11 +26,11 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     return (
       <div className={cn(
         'bg-card-foreground rounded-lg shadow-[2px_3px_4px_rgba(0,0,0,0.3)] flex items-center justify-center border-2 border-neutral-800/50',
-        'transform transition-transform',
+        'transform transition-transform text-primary',
         isSmall ? 'w-14 h-20' : 'w-20 h-28',
         className)}>
         <span className={cn(
-          "font-display text-primary text-shadow select-none",
+          "font-display text-shadow select-none",
           isSmall ? 'text-4xl' : 'text-6xl'
         )}>V</span>
       </div>
