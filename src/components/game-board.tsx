@@ -176,7 +176,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0 && !isPaused && !gameJustStarted) {
-      const turnTimer = setTimeout(opponentTurn, 1500);
+      const turnTimer = setTimeout(opponentTurn, 800);
       return () => clearTimeout(turnTimer);
     }
   }, [currentPlayer, opponentHand.length, gameState, opponentTurn, isPaused, gameJustStarted]);
@@ -251,12 +251,13 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   return (
     <div className="w-full h-full relative">
-      <div className="w-full h-full grid grid-cols-[150px_1fr_220px] lg:grid-cols-[180px_1fr_250px] gap-2 lg:gap-6 items-center">
-        <DeckPiles decks={decks} />
-        
-        <div className="flex flex-col h-full justify-between gap-4 py-4">
+      <div className="w-full h-full grid grid-cols-[1fr_220px] lg:grid-cols-[1fr_250px] gap-2 lg:gap-6 items-center">
+        <div className="flex flex-col h-full justify-between gap-2 py-4">
           <PlayerHand cards={opponentHand} />
-          <GameTable cards={tableCards} />
+          <div className="flex-grow flex flex-col items-center justify-center gap-4">
+            <DeckPiles decks={decks} />
+            <GameTable cards={tableCards} />
+          </div>
           <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
         </div>
         

@@ -37,7 +37,6 @@ const translations = {
 
     // Rules Dialog
     close: "Cerrar",
-    rulesTitlePart1: "Cómo Jugar: ",
     rulesObjectiveTitle: "Objetivo",
     rulesObjectiveText: "Sé el primer jugador en conseguir más puntos que tu oponente capturando cartas de la mesa.",
     rulesGameplayTitle: "Cómo Jugar",
@@ -84,7 +83,6 @@ const translations = {
 
     // Rules Dialog
     close: "Close",
-    rulesTitlePart1: "How to Play: ",
     rulesObjectiveTitle: "Objective",
     rulesObjectiveText: "Be the first player to score more points than your opponent by capturing cards from the table.",
     rulesGameplayTitle: "Gameplay",

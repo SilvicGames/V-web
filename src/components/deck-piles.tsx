@@ -8,10 +8,10 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
   <div className="relative w-24 h-32 flex items-center justify-center">
     {/* Under cards for stack effect */}
     {count > 2 && (
-      <div className="absolute w-20 h-28 bg-card-foreground rounded-lg border-2 border-neutral-800/50 transform -rotate-6 shadow-md" />
+      <div className="absolute top-1.5 left-1.5 w-20 h-28 bg-card-foreground rounded-lg border-2 border-neutral-800/50" />
     )}
     {count > 1 && (
-      <div className="absolute w-20 h-28 bg-card-foreground rounded-lg border-2 border-neutral-800/50 transform rotate-3 shadow-md" />
+      <div className="absolute top-1 left-1 w-20 h-28 bg-card-foreground rounded-lg border-2 border-neutral-800/50" />
     )}
     
     {/* Top card with info */}
@@ -25,7 +25,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 
 export function DeckPiles({ decks }: DeckPilesProps) {
   return (
-    <div className="flex flex-col items-center justify-around h-full gap-8 py-4">
+    <div className="flex flex-row items-center justify-center gap-8">
         {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <div className="w-24 h-32"/>}
         {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <div className="w-24 h-32"/>}
         {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <div className="w-24 h-32"/>}

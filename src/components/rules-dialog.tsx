@@ -24,9 +24,8 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="text-3xl text-shadow-lg text-center">
-            <span className="font-body font-normal text-primary">{t.rulesTitlePart1}</span>
-            <span className="font-display text-primary">V</span>
+          <DialogTitle className="font-display text-6xl text-primary text-shadow-lg text-center">
+            V
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="h-[60vh] md:h-[50vh] pr-4">
