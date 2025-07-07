@@ -18,7 +18,7 @@ const InfoValue = ({ children }: { children: React.ReactNode }) => (
 
 const ScoreValue = ({ children, className }: { children: React.ReactNode, className?: string }) => (
     <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-28 w-full">
-        <p className={`font-display text-5xl ${className}`}>{children}</p>
+        <p className={`font-display text-6xl ${className}`}>{children}</p>
     </div>
 );
 
