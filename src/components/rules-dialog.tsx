@@ -40,7 +40,6 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
                     <li>{t.rulesGameplay3}</li>
                     <li>{t.rulesGameplay4}</li>
                     <li>{t.rulesGameplay5}</li>
-                    <li>{t.rulesGameplay6}</li>
                 </ul>
 
                 <h3 className="font-bold text-lg text-primary">{t.rulesScoringTitle}</h3>
