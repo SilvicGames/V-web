@@ -124,6 +124,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       }, 1500);
     } else {
       setTableCards(newTableCards);
+      setPreviousTableSum(currentTableSum);
       switchTurn();
     }
   }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused, gameJustStarted]);
@@ -167,6 +168,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       }, 1500);
     } else {
       setTableCards(newTableCards);
+      setPreviousTableSum(currentTableSum);
       switchTurn();
       setGameState('turn-transition');
       setTimeout(() => {
