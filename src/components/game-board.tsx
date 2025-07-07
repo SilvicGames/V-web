@@ -102,6 +102,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     if (isPaused || gameState !== 'playing' || currentPlayer !== 'player' || gameJustStarted) return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
@@ -115,16 +116,15 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setTableCards(newTableCards);
       setGameMessage(t.playerScores(points));
       const newScoreValue = currentTableSum + card.value;
+      setPreviousTableSum(newScoreValue);
       setTimeout(() => {
         handleScore('player', points, newTableCards);
-        setPreviousTableSum(newScoreValue);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
       }, 1500);
     } else {
       setTableCards(newTableCards);
-      setPreviousTableSum(currentTableSum);
       switchTurn();
     }
   }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t, isPaused, gameJustStarted]);
@@ -133,6 +133,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     if (opponentHand.length === 0 || gameState !== 'playing') return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card], false) > 0);
@@ -159,16 +160,15 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setTableCards(newTableCards);
       setGameMessage(t.cpuScores(points));
       const newScoreValue = currentTableSum + finalCardToPlay.value;
+      setPreviousTableSum(newScoreValue);
       setTimeout(() => {
         handleScore('opponent', points, newTableCards);
-        setPreviousTableSum(newScoreValue);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
       }, 1500);
     } else {
       setTableCards(newTableCards);
-      setPreviousTableSum(currentTableSum);
       switchTurn();
       setGameState('turn-transition');
       setTimeout(() => {
@@ -201,7 +201,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
-        setPreviousTableSum(null);
         setPlayerHand(newPlayerHand);
         setOpponentHand(newOpponentHand);
         setDecks(updatedDecks);
