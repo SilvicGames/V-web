@@ -16,9 +16,9 @@ const InfoValue = ({ children }: { children: React.ReactNode }) => (
     </div>
 );
 
-const ScoreValue = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-16 w-full">
-        {children}
+const ScoreValue = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-28 w-full">
+        <p className={`font-display text-5xl ${className}`}>{children}</p>
     </div>
 );
 
@@ -45,7 +45,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
       
         <InfoBlock title={t.cpuPoints}>
            <ScoreValue>
-                <p className="font-display text-4xl">{opponentScore}</p>
+                {opponentScore}
            </ScoreValue>
         </InfoBlock>
         
@@ -73,8 +73,8 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
         </InfoBlock>
 
         <InfoBlock title={t.yourPoints}>
-            <ScoreValue>
-                <p className={`font-display text-4xl text-primary`}>{playerScore}</p>
+            <ScoreValue className="text-primary">
+                {playerScore}
             </ScoreValue>
         </InfoBlock>
 
