@@ -1,6 +1,7 @@
 import type { Card as CardType } from '@/types';
 import { cn } from "@/lib/utils";
 import { GameCard } from './card';
+import { useLanguage } from '@/context/language-context';
 
 interface InfoPanelProps {
   playerScore: number;
@@ -19,15 +20,16 @@ const InfoItem = ({ label, value, className }: { label: string; value: React.Rea
 
 
 export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableSum, hintCards }: InfoPanelProps) {
+  const { t } = useLanguage();
   
   return (
     <div className="flex flex-col justify-around h-full gap-4 md:gap-6 py-8 text-foreground font-body">
-        <InfoItem label="Puntos CPU" value={opponentScore} />
-        <InfoItem label="Anterior" value={previousTableSum ?? '—'} />
-        <InfoItem label="Suma" value={tableSum > 0 ? tableSum : '—'} />
+        <InfoItem label={t.cpuPoints} value={opponentScore} />
+        <InfoItem label={t.previous} value={previousTableSum ?? '—'} />
+        <InfoItem label={t.sum} value={tableSum > 0 ? tableSum : '—'} />
         
         <div className="flex flex-col gap-2">
-            <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm text-foreground">Escoba</p>
+            <p className="font-semibold uppercase tracking-wider text-sm md:text-base text-shadow-sm text-foreground">{t.broom}</p>
             <div className="min-h-[90px] flex flex-wrap gap-1 justify-start items-center">
                 {hintCards.length > 0 && (
                     hintCards.map(card => (
@@ -41,7 +43,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
             </div>
         </div>
         
-        <InfoItem label="Puntos" value={playerScore} />
+        <InfoItem label={t.yourPoints} value={playerScore} />
     </div>
   );
 }

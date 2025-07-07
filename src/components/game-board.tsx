@@ -10,8 +10,10 @@ import { GameOverDialog } from './game-over-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import { InfoPanel } from './info-panel';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/language-context';
 
 export function GameBoard() {
+  const { t } = useLanguage();
   const [gameState, setGameState] = useState<GameState>('setup');
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
   const [opponentHand, setOpponentHand] = useState<Card[]>([]);
@@ -41,7 +43,8 @@ export function GameBoard() {
     
     const startingPlayer: Player = Math.random() < 0.5 ? 'player' : 'opponent';
     setCurrentPlayer(startingPlayer);
-    const initialMessage = startingPlayer === 'player' ? "¡Empiezas tú!" : "Empieza la CPU";
+    
+    const initialMessage = startingPlayer === 'player' ? t.playerStarts : t.cpuStarts;
     setGameMessage(initialMessage);
     setTimeout(() => {
       setGameMessage(prev => (prev === initialMessage ? null : prev));
@@ -53,7 +56,7 @@ export function GameBoard() {
     setPreviousTableSum(null);
     setHintCards([]);
     setGameState('playing');
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     setupGame();
@@ -87,7 +90,7 @@ export function GameBoard() {
     if (points > 0) {
       setGameState('scoring');
       setTableCards(newTableCards);
-      setGameMessage(`¡Sumas ${points} punto${points > 1 ? 's' : ''}!`);
+      setGameMessage(t.playerScores(points));
       setTimeout(() => {
         handleScore('player', points, newTableCards);
         switchTurn();
@@ -98,7 +101,7 @@ export function GameBoard() {
       setTableCards(newTableCards);
       switchTurn();
     }
-  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
+  }, [currentPlayer, gameState, handleScore, switchTurn, tableCards, t]);
 
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0 || gameState !== 'playing') return;
@@ -129,7 +132,7 @@ export function GameBoard() {
     if (points > 0) {
       setGameState('scoring');
       setTableCards(newTableCards);
-      setGameMessage(`¡Oponente suma ${points} punto${points > 1 ? 's' : ''}!`);
+      setGameMessage(t.cpuScores(points));
       setTimeout(() => {
         handleScore('opponent', points, newTableCards);
         switchTurn();
@@ -142,7 +145,7 @@ export function GameBoard() {
         switchTurn();
       }, 500);
     }
-  }, [handleScore, opponentHand, switchTurn, tableCards, gameState]);
+  }, [handleScore, opponentHand, switchTurn, tableCards, gameState, t]);
 
   useEffect(() => {
     if (gameState === 'playing' && currentPlayer === 'opponent' && opponentHand.length > 0) {
@@ -168,7 +171,7 @@ export function GameBoard() {
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
-        setGameMessage("Repartiendo nuevas cartas...");
+        setGameMessage(t.dealingNewCards);
         setTimeout(() => {
             setPlayerHand(newPlayerHand);
             setOpponentHand(newOpponentHand);
@@ -177,10 +180,10 @@ export function GameBoard() {
             setGameMessage(null);
         }, 2000);
     } else {
-        setGameMessage("¡Se han jugado todas las cartas!");
+        setGameMessage(t.allCardsPlayed);
         setTimeout(() => setGameState('gameOver'), 2000);
     }
-  }, [decks]);
+  }, [decks, t]);
 
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
@@ -190,10 +193,10 @@ export function GameBoard() {
         const points = calculateScore(tableCards);
 
         if (points > 0) {
-          setGameMessage(`${scoringPlayer === 'player' ? 'Te llevas' : 'Oponente se lleva'} las últimas por ${points} punto${points > 1 ? 's' : ''}!`);
+          setGameMessage(scoringPlayer === 'player' ? t.playerTakesLast(points) : t.cpuTakesLast(points));
           setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
         } else {
-          setGameMessage(`Las últimas cartas son para ${scoringPlayer === 'player' ? 'ti' : 'el oponente'}. Sin puntos.`);
+          setGameMessage(scoringPlayer === 'player' ? t.playerTakesLastNoPoints : t.cpuTakesLastNoPoints);
         }
         
         setTimeout(() => {
@@ -205,7 +208,7 @@ export function GameBoard() {
         continueRoundOrEndGame();
       }
     }
-  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, continueRoundOrEndGame]);
+  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, continueRoundOrEndGame, t]);
 
   useEffect(() => {
       checkRoundEnd();
@@ -224,7 +227,7 @@ export function GameBoard() {
       <DeckPiles decks={decks} />
       
       <div className="flex flex-col h-full justify-between gap-4 py-4">
-        <PlayerHand cards={opponentHand} isTurn={currentPlayer === 'opponent'} />
+        <PlayerHand cards={opponentHand} />
         <GameTable cards={tableCards} />
         <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
       </div>

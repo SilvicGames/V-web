@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { PartyPopper, Trophy, Frown } from 'lucide-react';
+import { useLanguage } from "@/context/language-context";
 
 interface GameOverDialogProps {
   isOpen: boolean;
@@ -19,10 +20,12 @@ interface GameOverDialogProps {
 }
 
 export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onPlayAgain }: GameOverDialogProps) {
+  const { t } = useLanguage();
+
   const getTitle = () => {
-    if (winner === 'player') return "¡Enhorabuena, has ganado!";
-    if (winner === 'opponent') return "La CPU ha ganado";
-    return "¡Es un empate!";
+    if (winner === 'player') return t.congrats;
+    if (winner === 'opponent') return t.cpuWon;
+    return t.tie;
   };
 
   const getIcon = () => {
@@ -40,11 +43,11 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
             {getTitle()}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-center text-lg !mt-4 text-muted-foreground">
-            Puntuación Final: Tú {playerScore} - {opponentScore} CPU
+            {t.finalScore}: {t.you} {playerScore} - {opponentScore} {t.cpu}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Jugar de nuevo</AlertDialogAction>
+          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">{t.playAgain}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

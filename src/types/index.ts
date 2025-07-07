@@ -15,3 +15,5 @@ export type Decks = {
 };
 
 export type GameState = 'setup' | 'playing' | 'scoring' | 'dealing' | 'gameOver';
+
+export type Language = 'es' | 'en';

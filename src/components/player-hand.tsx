@@ -1,6 +1,7 @@
 import type { Card as CardType } from '@/types';
 import { GameCard } from './card';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/language-context';
 
 interface PlayerHandProps {
   cards: CardType[];
@@ -11,6 +12,7 @@ interface PlayerHandProps {
 }
 
 export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false, isDealing }: PlayerHandProps) {
+  const { t } = useLanguage();
   return (
     <div className={cn(
         "w-full transition-all duration-500 rounded-lg", 
@@ -20,7 +22,7 @@ export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false
         "flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2 rounded-lg",
         isPlayer && "bg-secondary/40 shadow-inner"
         )}>
-        {isDealing && <p className="text-foreground text-xl font-semibold">Dealing cards...</p>}
+        {isDealing && <p className="text-foreground text-xl font-semibold">{t.dealing}</p>}
         {!isDealing && cards.length > 0 && (
           cards.map((card, index) => (
             <GameCard 
@@ -33,7 +35,7 @@ export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false
           ))
         )}
          {!isDealing && cards.length === 0 && (
-          <p className="text-muted-foreground font-semibold">No cards</p>
+          <p className="text-muted-foreground font-semibold">{t.noCards}</p>
         )}
       </div>
     </div>
