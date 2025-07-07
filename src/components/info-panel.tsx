@@ -15,7 +15,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col w-32 justify-between gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body h-full">
+    <div className="flex flex-col w-36 justify-between gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body h-full">
       {/* Opponent Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.cpuPoints}</p>
