@@ -62,15 +62,19 @@ export function GameBoard() {
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
 
-    const points = calculateScore(tableCards, card);
-    if (points > 0) {
-      handleScore('player', points, 'play');
-    } else {
-      setTableCards(prev => [...prev, card]);
-    }
+    const newTableCards = [...tableCards, card];
+    setTableCards(newTableCards);
     
-    switchTurn();
+    const points = calculateScore(tableCards, card);
 
+    if (points > 0) {
+      setTimeout(() => {
+        handleScore('player', points, 'play');
+        switchTurn();
+      }, 1500);
+    } else {
+      switchTurn();
+    }
   }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
 
   const opponentTurn = useCallback(() => {
@@ -79,17 +83,24 @@ export function GameBoard() {
     const cardToPlay = opponentHand[0];
     setOpponentHand(prev => prev.slice(1));
     setLastPlayerToPlay('opponent');
-
-    const points = calculateScore(tableCards, cardToPlay);
     
-    setTimeout(() => {
-      if (points > 0) {
+    const newTableCards = [...tableCards, cardToPlay];
+    setTableCards(newTableCards);
+    
+    const points = calculateScore(tableCards, cardToPlay);
+
+    if (points > 0) {
+      // Scoring play: wait longer to see the combination.
+      setTimeout(() => {
         handleScore('opponent', points, 'opponent play');
-      } else {
-        setTableCards(prev => [...prev, cardToPlay]);
-      }
-      switchTurn();
-    }, 1000);
+        switchTurn();
+      }, 1500);
+    } else {
+      // Non-scoring play: shorter wait for pacing.
+      setTimeout(() => {
+        switchTurn();
+      }, 500);
+    }
   }, [handleScore, opponentHand, switchTurn, tableCards]);
 
 
