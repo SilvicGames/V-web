@@ -115,8 +115,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.playerScores(points));
-      const newScoreValue = currentTableSum + card.value;
-      setPreviousTableSum(newScoreValue);
       setTimeout(() => {
         handleScore('player', points, newTableCards);
         switchTurn();
@@ -159,8 +157,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.cpuScores(points));
-      const newScoreValue = currentTableSum + finalCardToPlay.value;
-      setPreviousTableSum(newScoreValue);
       setTimeout(() => {
         handleScore('opponent', points, newTableCards);
         switchTurn();
@@ -214,17 +210,16 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
             setGameState('scoring'); 
             setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
             const newScoreValue = tableCards.reduce((acc, c) => acc + c.value, 0);
+            setPreviousTableSum(newScoreValue);
             
             setTimeout(() => {
               setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
               setTableCards([]);
-              setPreviousTableSum(newScoreValue);
               setGameMessage(null);
               setGameState('gameOver');
             }, 2000);
           } else {
             setTableCards([]);
-            setPreviousTableSum(null);
             setGameState('gameOver');
           }
         } else {
