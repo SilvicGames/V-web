@@ -97,27 +97,32 @@ export function calculateScore(allCards: Card[], isLastPlayOfTheGame = false): n
 
   const tableSum = allCards.reduce((acc, card) => acc + card.value, 0);
 
+  // Rule: Must be a multiple of 5 to score
   if (tableSum % 5 !== 0) {
     return 0;
   }
+
+  // Special case: Capturing only a single '5'
+  if (allCards.length === 1 && allCards[0].value === 5) {
+    // If it's the last play of the game, it's worth 1 point.
+    // Otherwise, it's worth 0.
+    return isLastPlayOfTheGame ? 1 : 0;
+  }
   
   let points = 0;
-  const numberOfFives = allCards.filter(card => card.value === 5).length;
 
+  // Rule: Calculate points from the sum
   if (tableSum > 0 && tableSum % 10 === 0) {
+    // 1 point for each multiple of 10
     points += tableSum / 10;
   } else { 
+    // 1 point for other multiples of 5 (5, 15, 25...)
     points += 1;
   }
 
+  // Rule: Add bonus points for each '5' card captured
+  const numberOfFives = allCards.filter(card => card.value === 5).length;
   points += numberOfFives;
-  
-  // After calculating all points, check for the exception.
-  if (allCards.length === 1 && allCards[0].value === 5 && !isLastPlayOfTheGame) {
-    // If it's a single 5 capture during normal play, it's worth 0 points,
-    // overriding any calculated points.
-    return 0;
-  }
   
   return points;
 }
