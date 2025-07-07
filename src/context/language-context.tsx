@@ -23,11 +23,10 @@ const translations = {
 
     // InfoPanel
     cpuPoints: "Puntos CPU",
-    previous: "Anterior",
-    sum: "Suma",
+    previous: "Anterior Jugada",
+    sum: "Suma Jugada",
     broom: "Escoba",
     yourPoints: "Puntos",
-    noScoringPlays: "Sin jugadas con premio",
 
     // PlayerHand
     noCards: "Sin cartas",
@@ -70,11 +69,10 @@ const translations = {
 
     // InfoPanel
     cpuPoints: "CPU Points",
-    previous: "Previous",
-    sum: "Sum",
+    previous: "Previous Play",
+    sum: "Play Sum",
     broom: "Broom",
     yourPoints: "Points",
-    noScoringPlays: "No scoring plays",
     
     // PlayerHand
     noCards: "No cards",

@@ -92,7 +92,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
     }
     setTableCards([]);
-    setPreviousTableSum(null);
   }, []);
   
   const switchTurn = useCallback(() => {
@@ -103,7 +102,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     if (isPaused || gameState !== 'playing' || currentPlayer !== 'player') return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
-    setPreviousTableSum(currentTableSum);
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
     setLastPlayerToPlay('player');
@@ -116,6 +114,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.playerScores(points));
+      setPreviousTableSum(currentTableSum + card.value);
       setTimeout(() => {
         handleScore('player', points, newTableCards);
         switchTurn();
@@ -132,7 +131,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     if (opponentHand.length === 0 || gameState !== 'playing') return;
 
     const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
-    setPreviousTableSum(currentTableSum);
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card], false) > 0);
@@ -158,6 +156,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setGameState('scoring');
       setTableCards(newTableCards);
       setGameMessage(t.cpuScores(points));
+      setPreviousTableSum(currentTableSum + finalCardToPlay.value);
       setTimeout(() => {
         handleScore('opponent', points, newTableCards);
         switchTurn();
@@ -251,7 +250,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   return (
     <div className="w-full h-full absolute inset-0">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-6 p-6 pt-0">
+       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-6 p-6">
         
         <div className="flex items-center w-56">
             <DeckPiles decks={decks} />
