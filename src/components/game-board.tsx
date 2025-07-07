@@ -187,7 +187,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
             const potentialTable = [...tableCards, card];
             return calculateScore(potentialTable, false) > 0;
         });
-        setHintCards(possiblePlays);
+        const uniqueHintCards = Array.from(new Map(possiblePlays.map(card => [card.value, card])).values());
+        setHintCards(uniqueHintCards);
     } else {
         setHintCards([]);
     }
@@ -251,26 +252,39 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   return (
     <div className="w-full h-full relative">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_220px] lg:grid-cols-[auto_1fr_250px] gap-2 lg:gap-6 items-center p-4 md:p-6 pt-16">
-        <div className="h-full flex flex-col justify-center">
-          <DeckPiles decks={decks} />
-        </div>
-        <div className="flex flex-col h-full justify-between gap-2 py-4">
-          <PlayerHand cards={opponentHand} />
-          <div className="flex-grow flex flex-col items-center justify-center gap-4 pt-4">
-            <GameTable cards={tableCards} />
-          </div>
-          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
+       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] grid-rows-[auto_1fr_auto] gap-x-2 lg:gap-x-4 gap-y-1 lg:gap-y-2 items-center p-4 md:p-6">
+        
+        {/* Opponent's Hand (Top-Center) */}
+        <div className="col-start-2 self-start">
+            <PlayerHand cards={opponentHand} />
         </div>
         
-        <InfoPanel 
-          playerScore={scores.player}
-          opponentScore={scores.opponent}
-          previousTableSum={previousTableSum}
-          tableSum={tableSum}
-          hintCards={hintCards}
-        />
-      </div>
+        {/* Deck Piles (Middle-Left) */}
+        <div className="row-start-2 justify-self-center">
+            <DeckPiles decks={decks} />
+        </div>
+
+        {/* Game Table (Middle-Center) */}
+        <div className="row-start-2 col-start-2">
+            <GameTable cards={tableCards} />
+        </div>
+        
+        {/* Info Panel (Middle-Right) */}
+        <div className="row-start-2 col-start-3 justify-self-center">
+            <InfoPanel 
+                playerScore={scores.player}
+                opponentScore={scores.opponent}
+                previousTableSum={previousTableSum}
+                tableSum={tableSum}
+                hintCards={hintCards}
+            />
+        </div>
+
+        {/* Player's Hand (Bottom-Center) */}
+        <div className="col-start-2 row-start-3 self-end">
+            <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing'} onPlayCard={handlePlayCard} />
+        </div>
+    </div>
 
       <AnimatePresence>
         {gameMessage && (
