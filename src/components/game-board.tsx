@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
@@ -29,7 +28,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const [playerHand, setPlayerHand] = useState<Card[]>([]);
   const [opponentHand, setOpponentHand] = useState<Card[]>([]);
   const [tableCards, setTableCards] = useState<Card[]>([]);
-  const [decks, setDecks] = useState<Decks>({ low: [], mid: [], high: [] });
+  const [decks, setDecks] = useState<Decks>(createDecks());
   const [scores, setScores] = useState({ player: 0, opponent: 0 });
   const [currentPlayer, setCurrentPlayer] = useState<Player>('player');
   const [lastPlayerToPlay, setLastPlayerToPlay] = useState<Player | null>(null);
@@ -48,17 +47,15 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
     }
     setTableCards([]);
-    setPreviousTableSum(null);
   }, []);
   
   const switchTurn = useCallback(() => {
     setCurrentPlayer(p => (p === 'player' ? 'opponent' : 'player'));
   }, []);
-
+  
   const setupGame = useCallback(() => {
     setGameState('setup');
     const initialDecks = createDecks();
-    setDecks(initialDecks);
     const { newPlayerHand, newOpponentHand, updatedDecks } = dealCards(initialDecks);
     setPlayerHand(newPlayerHand);
     setOpponentHand(newOpponentHand);
@@ -77,7 +74,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setGameJustStarted(true);
     setGameState('playing');
     setScoringInfo(null);
-  }, []);
+  }, [t.cpuStarts, t.playerStarts]);
 
   const handleContinueAfterScoring = useCallback(() => {
     if (!scoringInfo) return;
@@ -86,10 +83,12 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     if (isEndOfGame) {
         setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
         setTableCards([]);
+        setPreviousTableSum(null);
         setGameMessage(null);
         setGameState('gameOver');
     } else {
         handleScore(player, points, cards);
+        setPreviousTableSum(null);
         switchTurn();
         setGameState('playing');
         setGameMessage(null);
@@ -112,10 +111,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [gameState, onScoringStateChange]);
 
   useEffect(() => {
-    setupGame();
-  }, [setupGame]);
-
-  useEffect(() => {
     if (gameJustStarted && !isPaused) {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
@@ -132,7 +127,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const handlePlayCard = useCallback((card: Card) => {
     if (isPaused || gameState !== 'playing' || currentPlayer !== 'player' || gameJustStarted) return;
 
-    setPreviousTableSum(tableCards.reduce((acc, c) => acc + c.value, 0));
+    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
     setLastPlayedCardValue(card.value);
 
     setPlayerHand(prev => prev.filter(c => c.id !== card.id));
@@ -155,7 +151,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   const opponentTurn = useCallback(() => {
     if (isPaused || opponentHand.length === 0 || gameState !== 'playing') return;
 
-    setPreviousTableSum(tableCards.reduce((acc, c) => acc + c.value, 0));
+    const currentTableSum = tableCards.reduce((acc, c) => acc + c.value, 0);
+    setPreviousTableSum(currentTableSum);
 
     let cardToPlay: Card | undefined;
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card], false) > 0);
@@ -313,7 +310,7 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
               className={cn(
                 'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display',
                 gameState === 'scoring'
-                  ? 'mt-8 bg-card-foreground/90 border-primary text-primary-foreground text-5xl text-shadow-lg'
+                  ? 'mt-8 bg-black/90 border-primary text-primary-foreground text-5xl text-shadow-lg'
                   : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow pointer-events-auto'
               )}
             >
