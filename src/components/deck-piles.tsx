@@ -19,13 +19,24 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
     </div>
 );
 
+const EmptyDeckPile = ({ label }: { label: string }) => (
+    <div className="relative w-24 h-32 flex items-center justify-center">
+        <div className="relative w-20 h-28">
+            <div className="absolute top-0 left-0 w-full h-full bg-black/20 rounded-lg shadow-inner flex flex-col items-center justify-center border-2 border-dashed border-neutral-600 text-neutral-500 p-2">
+                <p className="font-display text-4xl leading-none select-none">{label}</p>
+                <span className="absolute bottom-1 right-2 font-display text-2xl select-none">0</span>
+            </div>
+        </div>
+    </div>
+);
+
 
 export function DeckPiles({ decks }: { decks: Decks }) {
   return (
-    <div className="flex w-44 flex-col items-center justify-around gap-4 rounded-lg bg-secondary/40 p-4 shadow-inner h-full">
-        {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <div className="w-24 h-32"/>}
-        {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <div className="w-24 h-32"/>}
-        {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <div className="w-24 h-32"/>}
+    <div className="flex w-full flex-col items-center justify-around gap-4 rounded-lg bg-secondary/40 p-4 shadow-inner h-full">
+        {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <EmptyDeckPile label="1-4"/>}
+        {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <EmptyDeckPile label="5"/>}
+        {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <EmptyDeckPile label="6-9"/>}
     </div>
   );
 }

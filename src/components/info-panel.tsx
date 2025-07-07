@@ -15,29 +15,29 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
   const { t } = useLanguage();
   
   return (
-    <div className="flex flex-col w-full h-full justify-between gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner text-foreground font-body">
+    <div className="flex flex-col w-full h-full justify-around gap-2 rounded-lg bg-secondary/40 p-4 shadow-inner text-foreground font-body">
       {/* Opponent Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.cpuPoints}</p>
-        <p className="font-display text-6xl md:text-7xl text-shadow">{opponentScore}</p>
+        <p className="font-display text-7xl text-shadow">{opponentScore}</p>
       </div>
 
       {/* Game State Info */}
       <div className="flex flex-col gap-3 my-2 bg-black/10 rounded-md p-3 border border-black/20">
         <div className="flex justify-between items-baseline">
           <p className="font-semibold uppercase text-xs md:text-sm">{t.sum}</p>
-          <p className="font-display text-2xl md:text-3xl">{tableSum > 0 ? tableSum : ''}</p>
+          <p className="font-display text-4xl">{tableSum > 0 ? tableSum : ''}</p>
         </div>
         <div className="flex justify-between items-baseline">
           <p className="font-semibold uppercase text-xs md:text-sm">{t.previous}</p>
-          <p className="font-display text-2xl md:text-3xl">{previousTableSum ?? ''}</p>
+          <p className="font-display text-4xl">{previousTableSum ?? ''}</p>
         </div>
       </div>
 
       {/* Broom / Hints */}
       <div className="flex flex-col gap-2 text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.broom}</p>
-        <div className="min-h-[7.5rem] rounded-md bg-black/20 flex flex-row flex-wrap gap-1 justify-center items-center p-2 border border-black/20">
+        <div className="min-h-[7.5rem] w-full rounded-md bg-black/20 flex flex-row flex-nowrap gap-2 justify-center items-center p-2 border border-black/20">
           {hintCards.length > 0 &&
             hintCards.map(card => (
               <GameCard key={`hint-${card.id}`} card={card} size="small" />
@@ -49,7 +49,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
       {/* Player Score */}
       <div className="text-center">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{t.yourPoints}</p>
-        <p className={cn("font-display text-6xl md:text-7xl text-primary text-shadow")}>{playerScore}</p>
+        <p className={cn("font-display text-7xl text-primary text-shadow")}>{playerScore}</p>
       </div>
     </div>
   );

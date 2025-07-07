@@ -19,18 +19,18 @@ function GamePage() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-2 sm:p-4 bg-gray-900">
+    <main className="flex min-h-screen flex-col items-center justify-start p-4 bg-gray-900">
       <div className="w-full max-w-7xl flex flex-col gap-2">
         <div className="flex items-center justify-start gap-4 p-2">
           <Button
             onClick={handleNewGame}
-            className="bg-secondary/80 hover:bg-secondary text-secondary-foreground font-semibold rounded-lg px-4 py-1.5 text-sm border-4 border-black/20 shadow-lg transition-transform hover:scale-105"
+            className="bg-background hover:bg-secondary text-foreground font-semibold rounded-lg px-4 py-2 text-sm border-4 border-gray-800/50 shadow-lg"
           >
             {t.newGame}
           </Button>
           <Button
             onClick={() => setIsRulesOpen(true)}
-            className="bg-secondary/80 hover:bg-secondary text-secondary-foreground font-semibold rounded-lg px-4 py-1.5 text-sm border-4 border-black/20 shadow-lg transition-transform hover:scale-105"
+            className="bg-background hover:bg-secondary text-foreground font-semibold rounded-lg px-4 py-2 text-sm border-4 border-gray-800/50 shadow-lg"
           >
             {t.howToPlay}
           </Button>
