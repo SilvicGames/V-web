@@ -25,7 +25,7 @@ const translations = {
     cpuPoints: "Puntos CPU",
     previous: "Suma Anterior",
     sum: "Suma Jugada",
-    broom: "Escoba",
+    broom: "Pista",
     yourPoints: "Puntos",
 
     // PlayerHand
@@ -71,7 +71,7 @@ const translations = {
     cpuPoints: "CPU Points",
     previous: "Previous Sum",
     sum: "Play Sum",
-    broom: "Broom",
+    broom: "Hint",
     yourPoints: "Points",
     
     // PlayerHand
