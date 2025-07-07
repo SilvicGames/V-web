@@ -30,7 +30,7 @@ function GamePage() {
       {isScoring && (
         <div
           onClick={handleContinue}
-          className="absolute inset-0 z-40 cursor-pointer bg-black/20"
+          className="absolute inset-0 z-40 cursor-pointer bg-transparent"
         />
       )}
       <div className="w-full max-w-7xl flex flex-col gap-4 px-4 md:px-6 lg:px-8">
