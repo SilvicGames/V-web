@@ -18,7 +18,6 @@ export function createDecks(): Decks {
   const mid: Card[] = [];
   const high: Card[] = [];
 
-  // Suit is a visual distinction applied on deal.
   const createCard = (value: number, type: string, index: number): Card => {
     return {
       id: `${type}-${value}-${index}`,
@@ -95,14 +94,31 @@ export function calculateScore(allCards: Card[]): number {
   if (allCards.length === 0) {
     return 0;
   }
-  
+
   const tableSum = allCards.reduce((acc, card) => acc + card.value, 0);
 
-  // Rule: score points if the sum of cards is a multiple of 5.
-  // 1 point for every 5 (e.g., a sum of 15 is 3 points).
-  if (tableSum > 0 && tableSum % 5 === 0) {
-    return tableSum / 5;
+  if (tableSum % 5 !== 0) {
+    return 0;
+  }
+  
+  // Rule: no points if the capture consists of a single 5.
+  // This covers both playing a 5 on an empty table and having a single 5 left over.
+  if (allCards.length === 1 && allCards[0].value === 5) {
+    return 0;
+  }
+  
+  let points = 0;
+  const numberOfFives = allCards.filter(card => card.value === 5).length;
+
+  if (tableSum > 0 && tableSum % 10 === 0) {
+    points += tableSum / 10;
+  } else { 
+    // It's a multiple of 5, but not 10.
+    points += 1;
   }
 
-  return 0;
+  // Add extra points for each 5 card in the capture.
+  points += numberOfFives;
+  
+  return points;
 }

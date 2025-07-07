@@ -69,16 +69,16 @@ export function GameBoard() {
     setLastPlayedCardValue(card.value);
 
     const newTableCards = [...tableCards, card];
-    setTableCards(newTableCards);
-    
     const points = calculateScore(newTableCards);
     
     if (points > 0) {
+      setTableCards(newTableCards);
       setTimeout(() => {
         handleScore('player', points);
         switchTurn();
       }, 1500);
     } else {
+      setTableCards(newTableCards);
       switchTurn();
     }
   }, [currentPlayer, gameState, handleScore, switchTurn, tableCards]);
@@ -98,21 +98,22 @@ export function GameBoard() {
     if (!cardToPlay) return;
 
     const finalCardToPlay = cardToPlay;
-    setLastPlayedCardValue(finalCardToPlay.value);
     
     const newTableCards = [...tableCards, finalCardToPlay];
     const points = calculateScore(newTableCards);
     
     setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
     setLastPlayerToPlay('opponent');
-    setTableCards(newTableCards);
+    setLastPlayedCardValue(finalCardToPlay.value);
     
     if (points > 0) {
+      setTableCards(newTableCards);
       setTimeout(() => {
         handleScore('opponent', points);
         switchTurn();
       }, 1500);
     } else {
+      setTableCards(newTableCards);
       setTimeout(() => {
         switchTurn();
       }, 500);
@@ -142,25 +143,48 @@ export function GameBoard() {
     }
   }, [playerHand, tableCards, currentPlayer, gameState]);
 
-  const checkRoundEnd = useCallback(() => {
-    if(playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing'){
-        setGameState('dealing');
-        const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
-        
-        if (cardsDealt) {
-            setGameMessage("Dealing new hands...");
-            setTimeout(() => {
-                setPlayerHand(newPlayerHand);
-                setOpponentHand(newOpponentHand);
-                setDecks(updatedDecks);
-                setGameState('playing');
-            }, 2000);
-        } else {
-            setGameMessage("All cards have been played!");
-            setTimeout(() => setGameState('gameOver'), 1000);
-        }
+  const continueRoundOrEndGame = useCallback(() => {
+    setGameState('dealing');
+    const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
+    
+    if (cardsDealt) {
+        setGameMessage("Dealing new hands...");
+        setTimeout(() => {
+            setPlayerHand(newPlayerHand);
+            setOpponentHand(newOpponentHand);
+            setDecks(updatedDecks);
+            setGameState('playing');
+        }, 2000);
+    } else {
+        setGameMessage("All cards have been played!");
+        setTimeout(() => setGameState('gameOver'), 2000);
     }
-  }, [playerHand, opponentHand, gameState, decks]);
+  }, [decks]);
+
+  const checkRoundEnd = useCallback(() => {
+    if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
+      if (tableCards.length > 0 && lastPlayerToPlay) {
+        setGameState('dealing'); // To prevent further plays
+        const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
+        const points = calculateScore(tableCards);
+
+        if (points > 0) {
+          setGameMessage(`${scoringPlayer === 'player' ? 'You get' : 'Opponent gets'} the last cards for ${points} point${points > 1 ? 's' : ''}!`);
+          setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
+        } else {
+          setGameMessage(`Last cards go to the ${scoringPlayer === 'player' ? 'player' : 'opponent'}. No points.`);
+        }
+        
+        setTimeout(() => {
+          setTableCards([]);
+          continueRoundOrEndGame();
+        }, 2000);
+      } else {
+        // No cards on table, proceed directly
+        continueRoundOrEndGame();
+      }
+    }
+  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, decks, continueRoundOrEndGame]);
 
   useEffect(() => {
       checkRoundEnd();
