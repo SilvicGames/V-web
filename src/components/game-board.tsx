@@ -166,11 +166,11 @@ export function GameBoard() {
     }
   }, [playerHand, tableCards, currentPlayer, gameState]);
 
-  const continueRoundOrEndGame = useCallback(() => {
-    setGameState('dealing');
+  const handleEndOfHand = useCallback(() => {
     const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
     
     if (cardsDealt) {
+        setGameState('dealing');
         setGameMessage(t.dealingNewCards);
         setTimeout(() => {
             setPlayerHand(newPlayerHand);
@@ -180,35 +180,37 @@ export function GameBoard() {
             setGameMessage(null);
         }, 2000);
     } else {
-        setGameMessage(t.allCardsPlayed);
-        setTimeout(() => setGameState('gameOver'), 2000);
+        // No more cards to deal. Game is over. Process final cards.
+        if (tableCards.length > 0 && lastPlayerToPlay) {
+          setGameState('scoring'); 
+          const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
+          const points = calculateScore(tableCards);
+
+          if (points > 0) {
+            setGameMessage(scoringPlayer === 'player' ? t.playerTakesLast(points) : t.cpuTakesLast(points));
+            setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
+          } else {
+            setGameMessage(scoringPlayer === 'player' ? t.playerTakesLastNoPoints : t.cpuTakesLastNoPoints);
+          }
+          
+          setTimeout(() => {
+            setTableCards([]);
+            setPreviousTableSum(null);
+            setGameMessage(t.allCardsPlayed);
+            setTimeout(() => setGameState('gameOver'), 2000);
+          }, 2000);
+        } else {
+          setGameMessage(t.allCardsPlayed);
+          setTimeout(() => setGameState('gameOver'), 2000);
+        }
     }
-  }, [decks, t]);
+  }, [decks, t, tableCards, lastPlayerToPlay]);
 
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
-      if (tableCards.length > 0 && lastPlayerToPlay) {
-        setGameState('scoring'); 
-        const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
-        const points = calculateScore(tableCards);
-
-        if (points > 0) {
-          setGameMessage(scoringPlayer === 'player' ? t.playerTakesLast(points) : t.cpuTakesLast(points));
-          setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
-        } else {
-          setGameMessage(scoringPlayer === 'player' ? t.playerTakesLastNoPoints : t.cpuTakesLastNoPoints);
-        }
-        
-        setTimeout(() => {
-          setTableCards([]);
-          setPreviousTableSum(null);
-          continueRoundOrEndGame();
-        }, 2000);
-      } else {
-        continueRoundOrEndGame();
-      }
+      handleEndOfHand();
     }
-  }, [playerHand, opponentHand, gameState, tableCards, lastPlayerToPlay, continueRoundOrEndGame, t]);
+  }, [playerHand.length, opponentHand.length, gameState, handleEndOfHand]);
 
   useEffect(() => {
       checkRoundEnd();
@@ -223,22 +225,24 @@ export function GameBoard() {
   }, [gameState, scores]);
 
   return (
-    <div className="w-full h-full grid grid-cols-[150px_1fr_220px] lg:grid-cols-[180px_1fr_250px] gap-2 lg:gap-6 items-center">
-      <DeckPiles decks={decks} />
-      
-      <div className="flex flex-col h-full justify-between gap-4 py-4">
-        <PlayerHand cards={opponentHand} />
-        <GameTable cards={tableCards} />
-        <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
+    <div className="w-full h-full relative">
+      <div className="w-full h-full grid grid-cols-[150px_1fr_220px] lg:grid-cols-[180px_1fr_250px] gap-2 lg:gap-6 items-center">
+        <DeckPiles decks={decks} />
+        
+        <div className="flex flex-col h-full justify-between gap-4 py-4">
+          <PlayerHand cards={opponentHand} />
+          <GameTable cards={tableCards} />
+          <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
+        </div>
+        
+        <InfoPanel 
+          playerScore={scores.player}
+          opponentScore={scores.opponent}
+          previousTableSum={previousTableSum}
+          tableSum={tableSum}
+          hintCards={hintCards}
+        />
       </div>
-      
-      <InfoPanel 
-        playerScore={scores.player}
-        opponentScore={scores.opponent}
-        previousTableSum={previousTableSum}
-        tableSum={tableSum}
-        hintCards={hintCards}
-      />
 
       <AnimatePresence>
         {gameMessage && (
