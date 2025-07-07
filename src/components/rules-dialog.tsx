@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogFooter,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/language-context";
@@ -24,7 +25,8 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-secondary/95 border-4 border-border/50 text-foreground font-body sm:max-w-xl">
         <DialogHeader>
-          <VIcon className="mx-auto text-6xl" />
+          <DialogTitle className="sr-only">{t.howToPlay}</DialogTitle>
+          <VIcon className="mx-auto text-8xl" />
         </DialogHeader>
         <ScrollArea className="h-[60vh] md:h-[50vh] pr-4">
             <div className="space-y-4 text-foreground/90">
