@@ -27,9 +27,6 @@ export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false
           />
         ))
       )}
-       {cards.length === 0 && (
-        <p className="text-muted-foreground font-semibold">{t.noCards}</p>
-      )}
     </div>
   );
 }
