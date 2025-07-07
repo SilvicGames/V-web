@@ -17,14 +17,14 @@ const InfoValue = ({ children }: { children: React.ReactNode }) => (
 );
 
 const ScoreValue = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-14 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex flex-col justify-center items-center text-center h-16 w-full">
         {children}
     </div>
 );
 
 
 const InfoBroom = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-20 w-full">
+    <div className="bg-black/10 rounded-lg p-1 border border-black/20 flex justify-center items-center text-center h-16 w-full">
         <div className="w-full h-full flex flex-row flex-nowrap gap-1 justify-center items-center">
            {children}
         </div>
@@ -51,13 +51,13 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
         
         <InfoBlock title={t.sum}>
             <InfoValue>
-                <p className="font-display text-3xl">{tableSum > 0 ? tableSum : ''}</p>
+                <p className="font-display text-2xl">{tableSum > 0 ? tableSum : ''}</p>
             </InfoValue>
         </InfoBlock>
         
         <InfoBlock title={t.previous}>
             <InfoValue>
-                <p className="font-display text-3xl">{previousTableSum ?? ''}</p>
+                <p className="font-display text-2xl">{previousTableSum ?? ''}</p>
             </InfoValue>
         </InfoBlock>
         
