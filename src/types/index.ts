@@ -1,6 +1,9 @@
+export type Suit = 'hearts' | 'spades';
+
 export interface Card {
   id: string;
   value: number;
+  suit: Suit;
 }
 
 export type Player = 'player' | 'opponent';

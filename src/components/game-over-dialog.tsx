@@ -27,24 +27,24 @@ export function GameOverDialog({ isOpen, winner, playerScore, opponentScore, onP
 
   const getIcon = () => {
     if (winner === 'player') return <Trophy className="w-8 h-8 text-accent" />;
-    if (winner === 'opponent') return <Frown className="w-8 h-8 text-muted-foreground" />;
+    if (winner === 'opponent') return <Frown className="w-8 h-8 text-foreground/60" />;
     return <PartyPopper className="w-8 h-8 text-primary" />;
   }
 
   return (
     <AlertDialog open={isOpen}>
-      <AlertDialogContent>
+      <AlertDialogContent className="bg-secondary border-border">
         <AlertDialogHeader>
           <AlertDialogTitle className="flex items-center justify-center gap-2 text-2xl">
             {getIcon()}
             {getTitle()}
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-center text-lg !mt-4">
+          <AlertDialogDescription className="text-center text-lg !mt-4 text-muted-foreground">
             Final Score: You {playerScore} - {opponentScore} Opponent
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90">Play Again</AlertDialogAction>
+          <AlertDialogAction onClick={onPlayAgain} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">Play Again</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

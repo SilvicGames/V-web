@@ -6,12 +6,9 @@ import { createDecks, dealCards, calculateScore } from '@/lib/game-logic';
 import { PlayerHand } from './player-hand';
 import { GameTable } from './game-table';
 import { DeckPiles } from './deck-piles';
-import { ScoreBoard } from './score-board';
 import { GameOverDialog } from './game-over-dialog';
-import { Card as UICard } from '@/components/ui/card';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LastPlayInfo } from './last-play-info';
-import { HintsPanel } from './hints-panel';
+import { InfoPanel } from './info-panel';
 
 export function GameBoard() {
   const [gameState, setGameState] = useState<GameState>('setup');
@@ -26,6 +23,8 @@ export function GameBoard() {
   const [winner, setWinner] = useState<'player' | 'opponent' | 'tie' | null>(null);
   const [lastScoringPlaySum, setLastScoringPlaySum] = useState<number | null>(null);
   const [hintCards, setHintCards] = useState<Card[]>([]);
+
+  const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
 
   const setupGame = useCallback(() => {
     setGameState('setup');
@@ -71,10 +70,10 @@ export function GameBoard() {
     setLastPlayerToPlay('player');
 
     const newTableCards = [...tableCards, card];
-    setTableCards(newTableCards);
-    
     const points = calculateScore(newTableCards);
 
+    setTableCards(newTableCards);
+    
     if (points > 0) {
       setTimeout(() => {
         handleScore('player', points, 'play');
@@ -92,22 +91,22 @@ export function GameBoard() {
     const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card]) > 0);
     
     if (scoringCards.length > 0) {
-      cardToPlay = scoringCards[0];
+      cardToPlay = scoringCards[Math.floor(Math.random() * scoringCards.length)];
     } else {
-      cardToPlay = opponentHand[0];
+      cardToPlay = opponentHand[Math.floor(Math.random() * opponentHand.length)];
     }
     
     if (!cardToPlay) return;
 
     const finalCardToPlay = cardToPlay;
-    setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
-    setLastPlayerToPlay('opponent');
     
     const newTableCards = [...tableCards, finalCardToPlay];
+    const points = calculateScore(newTableCards);
+    
+    setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
+    setLastPlayerToPlay('opponent');
     setTableCards(newTableCards);
     
-    const points = calculateScore(newTableCards);
-
     if (points > 0) {
       setTimeout(() => {
         handleScore('opponent', points, 'opponent play');
@@ -150,14 +149,16 @@ export function GameBoard() {
         const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
         
         if (cardsDealt) {
+            setGameMessage("Dealing new hands...");
             setTimeout(() => {
                 setPlayerHand(newPlayerHand);
                 setOpponentHand(newOpponentHand);
                 setDecks(updatedDecks);
                 setGameState('playing');
-            }, 1000);
+            }, 2000);
         } else {
-            setGameState('gameOver');
+            setGameMessage("All cards have been played!");
+            setTimeout(() => setGameState('gameOver'), 1000);
         }
     }
   }, [playerHand, opponentHand, gameState, decks]);
@@ -175,33 +176,38 @@ export function GameBoard() {
   }, [gameState, scores]);
 
   return (
-    <div className="w-full max-w-screen-2xl grid lg:grid-cols-[1fr_350px] gap-8 items-start">
-      <UICard className="p-4 relative min-w-0">
-        <PlayerHand cards={opponentHand} title="Opponent's Hand" isTurn={currentPlayer === 'opponent'} />
-        <GameTable cards={tableCards} />
-        <PlayerHand cards={playerHand} title="Your Hand" isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
-         <AnimatePresence>
-            {gameMessage && (
-                <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-4 rounded-lg shadow-lg border text-center font-semibold z-10"
-                onAnimationComplete={() => setTimeout(() => setGameMessage(null), 1500)}
-                >
-                {gameMessage}
-                </motion.div>
-            )}
-        </AnimatePresence>
-      </UICard>
+    <div className="w-full h-full grid grid-cols-[150px_1fr_220px] lg:grid-cols-[180px_1fr_250px] gap-2 lg:gap-6 items-center">
+      <DeckPiles decks={decks} />
       
-      <div className="flex flex-col gap-6">
-        <ScoreBoard playerScore={scores.player} opponentScore={scores.opponent} />
-        <DeckPiles decks={decks} />
-        <LastPlayInfo lastPlaySum={lastScoringPlaySum} />
-        <HintsPanel hintCards={hintCards} />
+      <div className="flex flex-col h-full justify-between gap-4 py-4">
+        <PlayerHand cards={opponentHand} isTurn={currentPlayer === 'opponent'} />
+        <GameTable cards={tableCards} />
+        <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
       </div>
+      
+      <InfoPanel 
+        playerScore={scores.player}
+        opponentScore={scores.opponent}
+        lastPlaySum={lastScoringPlaySum}
+        tableSum={tableSum}
+        hintCards={hintCards}
+      />
+
+      <AnimatePresence>
+        {gameMessage && (
+            <motion.div
+            key="game-message"
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            transition={{ duration: 0.5 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-secondary/80 backdrop-blur-sm p-3 px-6 rounded-lg shadow-lg border-2 border-border/50 text-center font-semibold z-50"
+            onAnimationComplete={() => setTimeout(() => setGameMessage(null), 1500)}
+            >
+            {gameMessage}
+            </motion.div>
+        )}
+      </AnimatePresence>
 
       <GameOverDialog 
         isOpen={gameState === 'gameOver'} 

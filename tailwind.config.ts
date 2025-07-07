@@ -1,5 +1,7 @@
 import type {Config} from 'tailwindcss';
 
+const plugin = require('tailwindcss/plugin');
+
 export default {
   darkMode: ['class'],
   content: [
@@ -10,8 +12,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Inter', 'sans-serif'],
-        headline: ['Inter', 'sans-serif'],
+        body: ['Poppins', 'sans-serif'],
+        headline: ['Poppins', 'sans-serif'],
+        display: ['Luckiest Guy', 'cursive'],
         code: ['monospace'],
       },
       colors: {
@@ -92,6 +95,11 @@ export default {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      textShadow: {
+        sm: '1px 1px 2px var(--tw-shadow-color)',
+        DEFAULT: '2px 2px 4px var(--tw-shadow-color)',
+        lg: '4px 4px 8px var(--tw-shadow-color)',
       },
     },
   },

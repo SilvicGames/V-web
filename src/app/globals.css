@@ -4,48 +4,56 @@
 
 @layer base {
   :root {
-    --background: 145 63% 92%; /* Light Green */
-    --foreground: 222.2 84% 4.9%;
-    --card: 145 63% 95%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 145 63% 95%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 145 52% 55%; /* Lively Green */
-    --primary-foreground: 210 40% 98%;
-    --secondary: 145 50% 88%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 145 50% 88%;
-    --muted-foreground: 224 7.3% 42.1%;
-    --accent: 51 100% 50%; /* Warm Yellow */
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 145 50% 80%;
-    --input: 145 50% 80%;
-    --ring: 145 52% 55%;
+    --background: 140 80% 25%; /* Deep Green Felt */
+    --foreground: 30 33% 95%; /* Ivory */
+
+    --card: 30 33% 92%; /* Ivory Card */
+    --card-foreground: 10 10% 20%; /* Dark Gray/Black */
+    
+    --popover: 140 80% 20%;
+    --popover-foreground: 30 33% 95%;
+
+    --primary: 0 80% 55%; /* Bright Red */
+    --primary-foreground: 30 33% 95%;
+
+    --secondary: 140 80% 20%; /* Darker Green */
+    --secondary-foreground: 30 33% 95%;
+    
+    --muted: 140 80% 30%;
+    --muted-foreground: 30 33% 85%;
+
+    --accent: 0 80% 55%; /* Red as accent */
+    --accent-foreground: 30 33% 95%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 30 33% 95%;
+
+    --border: 30 33% 85%; /* Light Ivory Border */
+    --input: 10 10% 25%;
+    --ring: 0 80% 60%;
     --radius: 0.8rem;
   }
 
   .dark {
-    --background: 145 20% 8%; /* Dark Green */
-    --foreground: 210 40% 98%;
-    --card: 145 20% 10%;
-    --card-foreground: 210 40% 98%;
-    --popover: 145 20% 8%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 145 52% 55%; /* Lively Green */
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 145 15% 15%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 145 15% 15%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-    --accent: 51 100% 50%; /* Warm Yellow */
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 145 15% 20%;
-    --input: 145 15% 20%;
-    --ring: 145 52% 55%;
+    --background: 140 80% 15%; /* Even Deeper Green */
+    --foreground: 30 33% 95%;
+    --card: 30 33% 92%;
+    --card-foreground: 10 10% 20%;
+    --popover: 140 80% 10%;
+    --popover-foreground: 30 33% 95%;
+    --primary: 0 80% 55%;
+    --primary-foreground: 30 33% 95%;
+    --secondary: 140 80% 12%;
+    --secondary-foreground: 30 33% 95%;
+    --muted: 140 80% 20%;
+    --muted-foreground: 30 33% 85%;
+    --accent: 0 80% 55%;
+    --accent-foreground: 30 33% 95%;
+    --destructive: 0 63% 30%;
+    --destructive-foreground: 30 33% 95%;
+    --border: 30 33% 85%;
+    --input: 10 10% 25%;
+    --ring: 0 80% 60%;
   }
 }
 
@@ -55,5 +63,14 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 1px 2px 3px rgb(0 0 0 / 0.2);
+  }
+  .text-shadow-sm {
+    text-shadow: 1px 1px 2px rgb(0 0 0 / 0.2);
   }
 }

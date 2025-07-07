@@ -1,21 +1,20 @@
 import type { Card as CardType } from '@/types';
 import { GameCard } from './card';
+import { cn } from '@/lib/utils';
 
 interface PlayerHandProps {
   cards: CardType[];
-  title: string;
   isPlayer?: boolean;
   onPlayCard?: (card: CardType) => void;
   isTurn?: boolean;
   isDealing?: boolean;
 }
 
-export function PlayerHand({ cards, title, isPlayer = false, onPlayCard, isTurn = false, isDealing }: PlayerHandProps) {
+export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false, isDealing }: PlayerHandProps) {
   return (
-    <div className="w-full">
-      <h2 className={`text-xl font-bold mb-2 text-center transition-colors ${isTurn ? 'text-accent animate-pulse' : 'text-foreground'}`}>{title}</h2>
-      <div className="flex justify-center items-center gap-2 flex-wrap min-h-[180px] md:min-h-[200px] bg-secondary/30 p-4 rounded-lg border">
-        {isDealing && <p className="text-muted-foreground">Dealing cards...</p>}
+    <div className={cn("w-full transition-all duration-500", isTurn && 'p-1 bg-primary/20 rounded-lg')}>
+      <div className="flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2">
+        {isDealing && <p className="text-foreground text-xl font-semibold">Dealing cards...</p>}
         {!isDealing && cards.length > 0 && (
           cards.map((card, index) => (
             <GameCard 
@@ -28,7 +27,7 @@ export function PlayerHand({ cards, title, isPlayer = false, onPlayCard, isTurn 
           ))
         )}
          {!isDealing && cards.length === 0 && (
-          <p className="text-muted-foreground">No cards</p>
+          <p className="text-muted-foreground font-semibold">No cards</p>
         )}
       </div>
     </div>
