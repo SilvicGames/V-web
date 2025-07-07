@@ -70,9 +70,9 @@ export function GameBoard() {
     setLastPlayerToPlay('player');
 
     const newTableCards = [...tableCards, card];
-    const points = calculateScore(newTableCards);
-
     setTableCards(newTableCards);
+    
+    const points = calculateScore(newTableCards);
     
     if (points > 0) {
       setTimeout(() => {

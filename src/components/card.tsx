@@ -13,7 +13,7 @@ const SuitDisplay = ({ suit, className }: { suit: Suit, className?: string}) => 
             color: 'text-card-foreground'
         }
     }
-    return <span className={cn('font-sans', className, suitMap[suit].color)}>{suitMap[suit].symbol}</span>
+    return <span className={cn('font-sans', suitMap[suit].color, className)}>{suitMap[suit].symbol}</span>
 }
 
 interface CardProps {
@@ -42,7 +42,7 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
     <div
       onClick={() => isPlayable && onPlay?.(card)}
       className={cn(
-        'relative w-20 h-28 bg-card rounded-lg p-2 flex flex-col justify-between border-2 border-black/20',
+        'relative w-20 h-28 bg-card rounded-lg p-1 flex flex-col justify-center items-center border-2 border-black/20',
         'shadow-[2px_3px_4px_rgba(0,0,0,0.3)]',
         'transform transition-transform duration-300',
         isPlayable ? 'cursor-pointer hover:-translate-y-2 hover:shadow-xl' : 'cursor-default',
@@ -50,17 +50,13 @@ export function GameCard({ card, isPlayable = false, onPlay, isFaceDown = false,
       )}
       aria-label={`Card with value ${card.value}`}
     >
-      <div className="flex justify-start">
-          <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm" />
-      </div>
-
+      <SuitDisplay suit={card.suit} className="absolute top-1 left-2 text-2xl text-shadow-sm" />
+      
       <div className="text-center select-none">
         <span className={cn('font-display text-6xl text-shadow', suitColor)}>{card.value}</span>
       </div>
-
-      <div className={cn("flex justify-end", suitColor)}>
-        <SuitDisplay suit={card.suit} className="text-2xl text-shadow-sm transform rotate-180" />
-      </div>
+      
+      <SuitDisplay suit={card.suit} className="absolute bottom-1 right-2 text-2xl text-shadow-sm transform rotate-180" />
     </div>
   );
 }
