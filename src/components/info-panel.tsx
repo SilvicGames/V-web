@@ -2,18 +2,33 @@ import type { Card as CardType } from '@/types';
 import { GameCard } from './card';
 import { useLanguage } from '@/context/language-context';
 
-const InfoBox = ({ children, className }: { children: React.ReactNode, className?: string }) => (
-    <div className={`bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center ${className}`}>
-        {children}
-    </div>
-);
-
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="flex flex-col items-center gap-1 w-full">
         <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{title}</p>
         {children}
     </div>
+);
+
+const InfoValue = ({ children }: { children: React.ReactNode }) => (
+    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-14 w-full">
+        <p className="font-display text-5xl">{children}</p>
+    </div>
+);
+
+const InfoBroom = ({ children }: { children: React.ReactNode }) => (
+    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex justify-center items-center text-center h-28 w-full">
+        <div className="w-full h-full flex flex-row flex-nowrap gap-2 justify-center items-center px-2">
+           {children}
+        </div>
+    </div>
 )
+
+const InfoScore = ({ score, isPlayer }: { score: number, isPlayer?: boolean }) => (
+    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-28 w-full">
+        <p className={`font-display text-8xl text-shadow ${isPlayer ? 'text-primary' : 'text-foreground'}`}>{score}</p>
+    </div>
+);
+
 
 export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableSum, hintCards }: {
     playerScore: number;
@@ -28,39 +43,30 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
     <div className="flex flex-col w-full h-full justify-between gap-4 rounded-lg bg-secondary/40 p-4 shadow-inner text-foreground font-body">
       
         <InfoBlock title={t.cpuPoints}>
-            <InfoBox className="h-32 w-full">
-                <p className="font-display text-7xl text-shadow">{opponentScore}</p>
-            </InfoBox>
+           <InfoScore score={opponentScore} />
         </InfoBlock>
 
         <InfoBlock title={t.sum}>
-            <InfoBox className="h-20 w-full">
-                <p className="font-display text-5xl">{tableSum > 0 ? tableSum : ''}</p>
-            </InfoBox>
+            <InfoValue>{tableSum > 0 ? tableSum : ''}</InfoValue>
         </InfoBlock>
+        
         <InfoBlock title={t.previous}>
-            <InfoBox className="h-20 w-full">
-                <p className="font-display text-5xl">{previousTableSum ?? ''}</p>
-            </InfoBox>
+            <InfoValue>{previousTableSum ?? ''}</InfoValue>
         </InfoBlock>
         
         <InfoBlock title={t.broom}>
-            <InfoBox className="h-28 w-full">
-                <div className="w-full h-full flex flex-row flex-nowrap gap-2 justify-center items-center px-2">
-                    {hintCards.length > 0 ?
-                        hintCards.map(card => (
-                        <GameCard key={`hint-${card.id}`} card={card} size="small" />
-                        ))
-                    : <div className="w-full h-full"/>
-                    }
-                </div>
-            </InfoBox>
+            <InfoBroom>
+                {hintCards.length > 0 ?
+                    hintCards.map(card => (
+                    <GameCard key={`hint-${card.id}`} card={card} size="small" />
+                    ))
+                : <div className="w-full h-full"/>
+                }
+            </InfoBroom>
         </InfoBlock>
 
         <InfoBlock title={t.yourPoints}>
-            <InfoBox className="h-32 w-full">
-                <p className="font-display text-7xl text-primary text-shadow">{playerScore}</p>
-            </InfoBox>
+            <InfoScore score={playerScore} isPlayer />
         </InfoBlock>
 
     </div>
