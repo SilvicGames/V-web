@@ -7,7 +7,7 @@ interface ScoreBoardProps {
 
 export function ScoreBoard({ playerScore, opponentScore }: ScoreBoardProps) {
   return (
-    <div className="w-full max-w-md mx-auto flex justify-around items-center p-4 bg-primary text-primary-foreground rounded-lg shadow-lg my-4">
+    <div className="w-full flex justify-around items-center p-4 bg-primary text-primary-foreground rounded-lg shadow-lg">
       <div className="text-center">
         <h3 className="text-lg font-semibold">Your Score</h3>
         <p className="text-4xl font-bold flex items-center gap-2 justify-center">

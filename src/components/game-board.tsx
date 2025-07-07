@@ -10,6 +10,8 @@ import { ScoreBoard } from './score-board';
 import { GameOverDialog } from './game-over-dialog';
 import { Card as UICard } from '@/components/ui/card';
 import { AnimatePresence, motion } from 'framer-motion';
+import { LastPlayInfo } from './last-play-info';
+import { HintsPanel } from './hints-panel';
 
 export function GameBoard() {
   const [gameState, setGameState] = useState<GameState>('setup');
@@ -22,6 +24,8 @@ export function GameBoard() {
   const [lastPlayerToPlay, setLastPlayerToPlay] = useState<Player | null>(null);
   const [gameMessage, setGameMessage] = useState<string | null>(null);
   const [winner, setWinner] = useState<'player' | 'opponent' | 'tie' | null>(null);
+  const [lastScoringPlaySum, setLastScoringPlaySum] = useState<number | null>(null);
+  const [hintCards, setHintCards] = useState<Card[]>([]);
 
   const setupGame = useCallback(() => {
     setGameState('setup');
@@ -37,6 +41,8 @@ export function GameBoard() {
     setLastPlayerToPlay(null);
     setGameMessage("Your turn to start!");
     setWinner(null);
+    setLastScoringPlaySum(null);
+    setHintCards([]);
     setGameState('playing');
   }, []);
 
@@ -46,11 +52,13 @@ export function GameBoard() {
 
   const handleScore = useCallback((scoringPlayer: Player, points: number, from: string) => {
     if (points > 0) {
+      const sum = tableCards.reduce((acc, card) => acc + card.value, 0);
+      setLastScoringPlaySum(sum);
       setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
       setGameMessage(`${scoringPlayer === 'player' ? 'You' : 'Opponent'} scored ${points} point${points > 1 ? 's' : ''}!`);
     }
     setTableCards([]);
-  }, []);
+  }, [tableCards]);
   
   const switchTurn = useCallback(() => {
     setCurrentPlayer(p => (p === 'player' ? 'opponent' : 'player'));
@@ -80,23 +88,32 @@ export function GameBoard() {
   const opponentTurn = useCallback(() => {
     if (opponentHand.length === 0) return;
 
-    const cardToPlay = opponentHand[0];
-    setOpponentHand(prev => prev.slice(1));
+    let cardToPlay: Card | undefined;
+    const scoringCards = opponentHand.filter(card => calculateScore([...tableCards, card]) > 0);
+    
+    if (scoringCards.length > 0) {
+      cardToPlay = scoringCards[0];
+    } else {
+      cardToPlay = opponentHand[0];
+    }
+    
+    if (!cardToPlay) return;
+
+    const finalCardToPlay = cardToPlay;
+    setOpponentHand(prev => prev.filter(c => c.id !== finalCardToPlay.id));
     setLastPlayerToPlay('opponent');
     
-    const newTableCards = [...tableCards, cardToPlay];
+    const newTableCards = [...tableCards, finalCardToPlay];
     setTableCards(newTableCards);
     
     const points = calculateScore(newTableCards);
 
     if (points > 0) {
-      // Scoring play: wait longer to see the combination.
       setTimeout(() => {
         handleScore('opponent', points, 'opponent play');
         switchTurn();
       }, 1500);
     } else {
-      // Non-scoring play: shorter wait for pacing.
       setTimeout(() => {
         switchTurn();
       }, 500);
@@ -114,9 +131,22 @@ export function GameBoard() {
     }
   }, [currentPlayer, opponentHand, gameState, opponentTurn]);
 
+  useEffect(() => {
+    if (gameState === 'playing' && currentPlayer === 'player' && playerHand.length > 0) {
+        const possiblePlays = playerHand.filter(card => {
+            const potentialTable = [...tableCards, card];
+            return calculateScore(potentialTable) > 0;
+        });
+        setHintCards(possiblePlays);
+    } else {
+        setHintCards([]);
+    }
+  }, [playerHand, tableCards, currentPlayer, gameState]);
+
   const checkRoundEnd = useCallback(() => {
     if(playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing'){
         setGameState('dealing');
+        setLastScoringPlaySum(null);
         const { newPlayerHand, newOpponentHand, updatedDecks, cardsDealt } = dealCards(decks);
         
         if (cardsDealt) {
@@ -127,7 +157,6 @@ export function GameBoard() {
                 setGameState('playing');
             }, 1000);
         } else {
-            // Game over
             setGameState('gameOver');
         }
     }
@@ -146,8 +175,8 @@ export function GameBoard() {
   }, [gameState, scores]);
 
   return (
-    <div className="w-full max-w-5xl flex flex-col gap-4">
-      <UICard className="p-4 relative">
+    <div className="w-full max-w-screen-2xl grid lg:grid-cols-[1fr_350px] gap-8 items-start">
+      <UICard className="p-4 relative min-w-0">
         <PlayerHand cards={opponentHand} title="Opponent's Hand" isTurn={currentPlayer === 'opponent'} />
         <GameTable cards={tableCards} />
         <PlayerHand cards={playerHand} title="Your Hand" isPlayer isTurn={currentPlayer === 'player'} onPlayCard={handlePlayCard} isDealing={gameState === 'dealing'} />
@@ -158,7 +187,7 @@ export function GameBoard() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-4 rounded-lg shadow-lg border text-center font-semibold"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-background/80 backdrop-blur-sm p-4 rounded-lg shadow-lg border text-center font-semibold z-10"
                 onAnimationComplete={() => setTimeout(() => setGameMessage(null), 1500)}
                 >
                 {gameMessage}
@@ -167,9 +196,11 @@ export function GameBoard() {
         </AnimatePresence>
       </UICard>
       
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="flex flex-col gap-6">
         <ScoreBoard playerScore={scores.player} opponentScore={scores.opponent} />
         <DeckPiles decks={decks} />
+        <LastPlayInfo lastPlaySum={lastScoringPlaySum} />
+        <HintsPanel hintCards={hintCards} />
       </div>
 
       <GameOverDialog 

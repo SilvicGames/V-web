@@ -17,7 +17,7 @@ const DeckPile = ({ count, label }: { count: number; label: string }) => (
 
 export function DeckPiles({ decks }: DeckPilesProps) {
   return (
-    <div className="w-full max-w-md mx-auto my-4">
+    <div>
         <h2 className="text-xl font-bold mb-2 text-center">Decks</h2>
         <div className="flex justify-center items-start gap-4 md:gap-8 p-4 bg-secondary/30 rounded-lg border">
             <DeckPile count={decks.low.length} label="1-4" />

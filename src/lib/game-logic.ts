@@ -18,21 +18,21 @@ export function createDecks(): Decks {
   const mid: Card[] = [];
   const high: Card[] = [];
 
-  // 20 cards from 1 to 4 (5 of each)
+  // 12 cards from 1 to 4 (3 of each)
   for (let i = 1; i <= 4; i++) {
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < 3; j++) {
       low.push({ id: `low-${i}-${j}`, value: i });
     }
   }
 
-  // 10 cards of 5
-  for (let j = 0; j < 10; j++) {
+  // 6 cards of 5
+  for (let j = 0; j < 6; j++) {
     mid.push({ id: `mid-5-${j}`, value: 5 });
   }
 
-  // 20 cards from 6 to 9 (5 of each)
+  // 12 cards from 6 to 9 (3 of each)
   for (let i = 6; i <= 9; i++) {
-    for (let j = 0; j < 5; j++) {
+    for (let j = 0; j < 3; j++) {
       high.push({ id: `high-${i}-${j}`, value: i });
     }
   }
