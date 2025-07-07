@@ -72,7 +72,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
     if (gameJustStarted) {
       const initialMessage = currentPlayer === 'player' ? t.playerStarts : t.cpuStarts;
       setGameMessage(initialMessage);
-      setGameJustStarted(false); // Set to false immediately to prevent re-triggering
+      setGameJustStarted(false); // Reset the flag
       const timer = setTimeout(() => {
         setGameMessage(null);
       }, 2000);
@@ -208,9 +208,9 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
           if (points > 0) {
             setGameState('scoring'); 
             setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
-            setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
             
             setTimeout(() => {
+              setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
               setTableCards([]);
               setPreviousTableSum(null);
               setGameMessage(t.allCardsPlayed);
@@ -227,7 +227,7 @@ export const GameBoard = forwardRef<GameBoardHandle, {}>((props, ref) => {
           setTimeout(() => setGameState('gameOver'), 2000);
         }
     }
-  }, [decks, t, tableCards, lastPlayerToPlay]);
+  }, [decks, t, tableCards, lastPlayerToPlay, scores]);
 
   const checkRoundEnd = useCallback(() => {
     if (playerHand.length === 0 && opponentHand.length === 0 && gameState === 'playing') {
