@@ -221,11 +221,12 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     } else {
         if (tableCards.length > 0 && lastPlayerToPlay) {
           const points = calculateScore(tableCards, true);
+          const scoringPlayer = lastPlayerToPlay === 'player' ? 'opponent' : 'player';
 
           if (points > 0) {
-            setScoringInfo({ player: lastPlayerToPlay, points, cards: tableCards, isEndOfGame: true });
+            setScoringInfo({ player: scoringPlayer, points, cards: tableCards, isEndOfGame: true });
             setGameState('scoring'); 
-            setGameMessage(lastPlayerToPlay === 'player' ? t.playerScores(points) : t.cpuScores(points));
+            setGameMessage(scoringPlayer === 'player' ? t.playerScores(points) : t.cpuScores(points));
           } else {
             setTableCards([]);
             setGameState('gameOver');
