@@ -4,28 +4,28 @@ import { useLanguage } from '@/context/language-context';
 
 const InfoBlock = ({ title, children }: { title: string, children: React.ReactNode }) => (
     <div className="flex flex-col items-center gap-1 w-full">
-        <p className="font-semibold uppercase tracking-wider text-xs md:text-sm opacity-80 text-shadow-sm">{title}</p>
+        <p className="font-semibold uppercase tracking-wider text-xs opacity-80 text-shadow-sm">{title}</p>
         {children}
     </div>
 );
 
 const InfoValue = ({ children }: { children: React.ReactNode }) => (
-    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-14 w-full">
+    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-20 w-full">
         <p className="font-display text-5xl">{children}</p>
     </div>
 );
 
 const InfoBroom = ({ children }: { children: React.ReactNode }) => (
     <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex justify-center items-center text-center h-28 w-full">
-        <div className="w-full h-full flex flex-row flex-nowrap gap-2 justify-center items-center px-2">
+        <div className="w-full h-full flex flex-row flex-nowrap gap-2 justify-center items-center">
            {children}
         </div>
     </div>
 )
 
 const InfoScore = ({ score, isPlayer }: { score: number, isPlayer?: boolean }) => (
-    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-28 w-full">
-        <p className={`font-display text-8xl text-shadow ${isPlayer ? 'text-primary' : 'text-foreground'}`}>{score}</p>
+    <div className="bg-black/10 rounded-lg p-3 border border-black/20 flex flex-col justify-center items-center text-center h-32 w-full">
+        <p className={`font-display text-6xl text-shadow ${isPlayer ? 'text-primary' : 'text-foreground'}`}>{score}</p>
     </div>
 );
 
@@ -46,11 +46,11 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
            <InfoScore score={opponentScore} />
         </InfoBlock>
 
-        <InfoBlock title={t.sum}>
+        <InfoBlock title="Suma Jugada">
             <InfoValue>{tableSum > 0 ? tableSum : ''}</InfoValue>
         </InfoBlock>
         
-        <InfoBlock title={t.previous}>
+        <InfoBlock title="Anterior Jugada">
             <InfoValue>{previousTableSum ?? ''}</InfoValue>
         </InfoBlock>
         
@@ -60,7 +60,7 @@ export function InfoPanel({ playerScore, opponentScore, previousTableSum, tableS
                     hintCards.map(card => (
                     <GameCard key={`hint-${card.id}`} card={card} size="small" />
                     ))
-                : <div className="w-full h-full"/>
+                : null
                 }
             </InfoBroom>
         </InfoBlock>
