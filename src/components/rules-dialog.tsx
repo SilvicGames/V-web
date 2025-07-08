@@ -28,7 +28,7 @@ export function RulesDialog({ isOpen, onClose }: RulesDialogProps) {
           <DialogTitle className="sr-only">{t.howToPlay}</DialogTitle>
           <VIcon className="mx-auto text-8xl" />
         </DialogHeader>
-        <ScrollArea className="h-[60vh] md:h-[50vh] pr-4">
+        <ScrollArea className="h-[55vh] pr-4">
             <div className="space-y-4 text-foreground/90">
                 <h3 className="font-bold text-lg text-primary">{t.rulesObjectiveTitle}</h3>
                 <p>{t.rulesObjectiveText}</p>
