@@ -310,10 +310,10 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
               }
               transition={{ type: 'spring', stiffness: 400, damping: 25 }}
               className={cn(
-                'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display',
+                'backdrop-blur-md p-3 px-6 sm:p-4 sm:px-8 rounded-2xl shadow-2xl border-4 text-center font-display max-w-[90%]',
                 gameState === 'scoring'
-                  ? 'mt-8 bg-black/90 border-primary text-primary-foreground text-4xl sm:text-5xl text-shadow-lg'
-                  : 'bg-secondary/90 border-border/50 text-foreground text-xl sm:text-2xl text-shadow pointer-events-auto'
+                  ? 'mt-8 bg-black/90 border-primary text-primary-foreground text-3xl sm:text-4xl md:text-5xl text-shadow-lg'
+                  : 'bg-secondary/90 border-border/50 text-foreground text-lg sm:text-xl md:text-2xl text-shadow pointer-events-auto'
               )}
             >
               {gameMessage}
