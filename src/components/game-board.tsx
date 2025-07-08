@@ -42,13 +42,6 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   const tableSum = tableCards.reduce((acc, card) => acc + card.value, 0);
 
-  const handleScore = useCallback((scoringPlayer: Player, points: number, capturedCards: Card[]) => {
-    if (points > 0) {
-      setScores(prev => ({ ...prev, [scoringPlayer]: prev[scoringPlayer] + points }));
-    }
-    setTableCards([]);
-  }, []);
-  
   const switchTurn = useCallback(() => {
     setCurrentPlayer(p => (p === 'player' ? 'opponent' : 'player'));
   }, []);
@@ -78,25 +71,24 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
 
   const handleContinueAfterScoring = useCallback(() => {
     if (!scoringInfo) return;
-    const { player, points, cards, isEndOfGame } = scoringInfo;
-    
-    setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
-    setTableCards([]);
+    const { player, points, isEndOfGame } = scoringInfo;
 
-    if (isEndOfGame) {
-        setPreviousTableSum(null);
-        setGameMessage(null);
-        setGameState('gameOver');
-    } else {
-        handleScore(player, points, cards);
-        setPreviousTableSum(null);
-        switchTurn();
-        setGameState('playing');
-        setGameMessage(null);
+    if (points > 0) {
+      setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
     }
 
+    setTableCards([]);
+    setPreviousTableSum(null);
+    setGameMessage(null);
     setScoringInfo(null);
-  }, [scoringInfo, handleScore, switchTurn]);
+
+    if (isEndOfGame) {
+      setGameState('gameOver');
+    } else {
+      switchTurn();
+      setGameState('playing');
+    }
+  }, [scoringInfo, switchTurn]);
 
   useImperativeHandle(ref, () => ({
     setupGame: () => {
