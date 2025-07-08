@@ -251,8 +251,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [gameState, scores]);
 
   return (
-    <div className="w-full h-full absolute inset-0 p-2 sm:p-4 md:p-6">
-       <div className="w-full h-full grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-stretch gap-y-2 md:gap-y-0 md:gap-x-4 lg:gap-x-6">
+    <div className="w-full p-2 sm:p-4 md:p-6">
+       <div className="w-full grid grid-cols-1 md:grid-cols-[auto_1fr_auto] md:items-start gap-y-2 md:gap-y-0 md:gap-x-4 lg:gap-x-6">
         
         <div className="flex items-center md:w-44 lg:w-48 order-2 md:order-1">
             <DeckPiles decks={decks} />

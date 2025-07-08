@@ -26,14 +26,14 @@ function GamePage() {
   };
 
   return (
-    <main className="flex min-h-[100dvh] flex-col items-center justify-start bg-gray-900 py-2 sm:py-4 relative">
+    <main className="flex min-h-[100dvh] flex-col items-center justify-center bg-gray-900 py-2 sm:py-4 relative">
       {isScoring && (
         <div
           onClick={handleContinue}
           className="absolute inset-0 z-40 cursor-pointer bg-transparent"
         />
       )}
-      <div className="w-full max-w-7xl flex flex-col flex-grow gap-4 px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="w-full max-w-7xl flex flex-col gap-4 px-2 sm:px-4 md:px-6 lg:px-8">
         <div className="flex items-center justify-start gap-2 sm:gap-4 flex-wrap">
           <Button
             onClick={handleNewGame}
@@ -51,7 +51,7 @@ function GamePage() {
           </Button>
           <LanguageSwitcher disabled={isScoring || isRulesOpen} />
         </div>
-        <div className="relative w-full flex-grow bg-background rounded-lg shadow-2xl border-2 sm:border-4 border-gray-800/50 overflow-hidden">
+        <div className="relative w-full bg-background rounded-lg shadow-2xl border-2 sm:border-4 border-gray-800/50 overflow-hidden">
           <GameBoard
             ref={gameBoardRef}
             isPaused={isRulesOpen || isScoring}

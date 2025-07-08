@@ -31,7 +31,7 @@ const EmptyDeckPile = ({ label }: { label: string }) => (
 
 export function DeckPiles({ decks }: { decks: Decks }) {
   return (
-    <div className="flex w-full flex-row md:flex-col items-center justify-around md:justify-between gap-1 sm:gap-2 md:gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner h-auto md:h-full">
+    <div className="flex w-full flex-row md:flex-col items-center justify-around md:justify-between gap-1 sm:gap-2 md:gap-4 rounded-lg bg-secondary/40 p-2 md:p-4 shadow-inner h-auto">
         {decks.low.length > 0 ? <DeckPile count={decks.low.length} label="1-4" /> : <EmptyDeckPile label="1-4"/>}
         {decks.mid.length > 0 ? <DeckPile count={decks.mid.length} label="5" /> : <EmptyDeckPile label="5"/>}
         {decks.high.length > 0 ? <DeckPile count={decks.high.length} label="6-9" /> : <EmptyDeckPile label="6-9"/>}
