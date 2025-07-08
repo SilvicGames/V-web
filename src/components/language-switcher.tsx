@@ -18,7 +18,7 @@ export function LanguageSwitcher({ disabled = false }: LanguageSwitcherProps) {
     <Button
       onClick={toggleLanguage}
       disabled={disabled}
-      className="bg-background hover:bg-secondary text-foreground font-semibold rounded-lg px-4 py-2 text-sm border-4 border-gray-800/50 shadow-lg"
+      className="bg-background hover:bg-secondary text-foreground font-semibold rounded-lg px-3 sm:px-4 py-2 text-xs sm:text-sm border-2 sm:border-4 border-gray-800/50 shadow-lg"
     >
       {language === 'es' ? 'English' : 'Español'}
     </Button>

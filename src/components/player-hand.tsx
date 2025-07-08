@@ -14,7 +14,7 @@ export function PlayerHand({ cards, isPlayer = false, onPlayCard, isTurn = false
   const { t } = useLanguage();
   return (
     <div className={cn(
-      "w-full flex justify-center items-center gap-2 flex-wrap min-h-[120px] md:min-h-[140px] p-2 rounded-lg bg-secondary/40 shadow-inner"
+      "w-full flex justify-center items-center gap-1 sm:gap-2 flex-wrap min-h-[90px] md:min-h-[140px] p-2 rounded-lg bg-secondary/40 shadow-inner"
       )}>
       {cards.length > 0 && (
         cards.map((card, index) => (

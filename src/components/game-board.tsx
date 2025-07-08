@@ -74,15 +74,16 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
     setGameJustStarted(true);
     setGameState('playing');
     setScoringInfo(null);
-  }, [t.cpuStarts, t.playerStarts]);
+  }, []);
 
   const handleContinueAfterScoring = useCallback(() => {
     if (!scoringInfo) return;
     const { player, points, cards, isEndOfGame } = scoringInfo;
+    
+    setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
+    setTableCards([]);
 
     if (isEndOfGame) {
-        setScores((prev) => ({ ...prev, [player]: prev[player] + points }));
-        setTableCards([]);
         setPreviousTableSum(null);
         setGameMessage(null);
         setGameState('gameOver');
@@ -258,20 +259,20 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
   }, [gameState, scores]);
 
   return (
-    <div className="w-full h-full absolute inset-0 p-6">
-       <div className="w-full h-full grid grid-cols-[auto_1fr_auto] items-stretch gap-x-6">
+    <div className="w-full h-full absolute inset-0 p-2 sm:p-4 md:p-6">
+       <div className="w-full h-full grid grid-cols-1 md:grid-cols-[auto_1fr_auto] items-stretch gap-y-2 md:gap-y-0 md:gap-x-4 lg:gap-x-6">
         
-        <div className="flex items-center w-48">
+        <div className="flex items-center md:w-44 lg:w-48 order-2 md:order-1">
             <DeckPiles decks={decks} />
         </div>
 
-        <div className="flex flex-col justify-between items-center gap-2 min-h-0">
+        <div className="flex flex-col justify-between items-center gap-1 sm:gap-2 min-h-0 order-1 md:order-2">
             <PlayerHand cards={opponentHand} isPlayer={false} />
             <GameTable cards={tableCards} />
             <PlayerHand cards={playerHand} isPlayer isTurn={currentPlayer === 'player' && !isPaused && gameState === 'playing' && !gameJustStarted} onPlayCard={handlePlayCard} />
         </div>
         
-        <div className="flex items-center w-48">
+        <div className="flex items-center md:w-44 lg:w-48 order-3 md:order-3">
             <InfoPanel 
                 playerScore={scores.player}
                 opponentScore={scores.opponent}
@@ -311,8 +312,8 @@ export const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(({ isPaused
               className={cn(
                 'backdrop-blur-md p-4 px-8 rounded-2xl shadow-2xl border-4 text-center font-display',
                 gameState === 'scoring'
-                  ? 'mt-8 bg-black/90 border-primary text-primary-foreground text-5xl text-shadow-lg'
-                  : 'bg-secondary/90 border-border/50 text-foreground text-2xl text-shadow pointer-events-auto'
+                  ? 'mt-8 bg-black/90 border-primary text-primary-foreground text-4xl sm:text-5xl text-shadow-lg'
+                  : 'bg-secondary/90 border-border/50 text-foreground text-xl sm:text-2xl text-shadow pointer-events-auto'
               )}
             >
               {gameMessage}
